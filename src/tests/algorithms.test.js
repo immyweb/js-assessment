@@ -1,21 +1,4 @@
-import {
-  steps,
-  pyramid,
-  vowels,
-  fib,
-  bubbleSort,
-  selectionSort,
-  mergeSort,
-  merge,
-} from "../exercises/algorithms";
-
-function getArray() {
-  return [100, -40, 500, -124, 0, 21, 7];
-}
-
-function getSortedArray() {
-  return [-124, -40, 0, 7, 21, 100, 500];
-}
+import { steps, fib } from "../exercises/algorithms";
 
 describe("Algorithms", () => {
   beforeEach(() => {
@@ -55,26 +38,5 @@ describe("Algorithms", () => {
     expect(fib(3)).toEqual(2);
     expect(fib(4)).toEqual(3);
     expect(fib(39)).toEqual(63245986);
-  });
-
-  test("you should be able to bubblesort an array", () => {
-    expect(bubbleSort(getArray())).toEqual(getSortedArray());
-  });
-
-  test("you should be able to selectionSort an array", () => {
-    expect(selectionSort(getArray())).toEqual(getSortedArray());
-  });
-
-  describe("you should be able to merge sort", () => {
-    test("merge function can join together two sorted arrays", () => {
-      const left = [1, 10];
-      const right = [2, 8, 12];
-
-      expect(merge(left, right)).toEqual([1, 2, 8, 10, 12]);
-    });
-
-    test("sorts an array", () => {
-      expect(mergeSort(getArray())).toEqual(getSortedArray());
-    });
   });
 });

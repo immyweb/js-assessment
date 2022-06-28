@@ -28,31 +28,3 @@ export function steps(n) {}
 // Example:
 //   fib(4) === 3
 export function fib(n) {}
-
-// --- Directions
-// Implement bubbleSort
-export function bubbleSort(arr) {
-  // Implement bubblesort
-  for (let i = 0; i < arr.length; i++) {
-    for (let j = 0; j < arr.length - i - 1; j++) {
-      if (arr[j] > arr[j + 1]) {
-        const lesser = arr[j + 1];
-        arr[j + 1] = arr[j];
-        arr[j] = lesser;
-      }
-    }
-  }
-
-  // return the sorted array
-  return arr;
-}
-
-// --- Directions
-// Implement selectionSort
-export function selectionSort(arr) {}
-
-// --- Directions
-// Implement mergeSort
-export function mergeSort(arr) {}
-
-export function merge(left, right) {}

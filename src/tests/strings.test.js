@@ -4,6 +4,7 @@ import {
   maxChar,
   anagrams,
   capitalize,
+  vowels,
 } from "../exercises/strings";
 
 describe("Strings", () => {

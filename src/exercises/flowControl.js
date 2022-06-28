@@ -7,5 +7,3 @@
 // otherwise the function should return the number, or false if no number
 // was provided or the value provided is not a number
 export function fizzBuzz(num) {}
-
-// TODO: Switch statement
