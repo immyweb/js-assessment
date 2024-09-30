@@ -1,21 +1,13 @@
 // you should be able to sum the items of an array
 export function sumArray(arr) {
-  const sum = arr.reduce((a, b) => {
-    return a + b;
-  });
-
-  return sum;
+  const result = arr.reduce((a, b) => a + b);
+  return result;
 }
 
 // you should be able to remove all instances of a value from an array
 export function remove(arr, item) {
-  let newArr = [];
-  arr.forEach((i) => {
-    if (i !== item) {
-      newArr.push(i);
-    }
-  });
-  return newArr;
+  const result = arr.filter((num) => num !== item);
+  return result;
 }
 
 // you should be able to remove all instances of a value from an array, returning the original array
@@ -77,20 +69,24 @@ export function count(arr, item) {
 
 // you should be able to find duplicates in an array
 export function duplicates(arr) {
-  let seen = {};
-  let dupes = [];
+  let dupes = {};
+  let result = [];
 
-  for (let i = 0, len = arr.length; i < len; i++) {
-    seen[arr[i]] = seen[arr[i]] ? seen[arr[i]] + 1 : 1;
-  }
+  arr.forEach((num) => {
+    if (dupes[num]) {
+      dupes[num]++;
+    } else {
+      dupes[num] = 1;
+    }
+  });
 
-  for (let item in seen) {
-    if (seen.hasOwnProperty(item) && seen[item] > 1) {
-      dupes.push(parseInt(item));
+  for (let prop in dupes) {
+    if (dupes.hasOwnProperty(prop) && dupes[prop] > 1) {
+      result.push(parseInt(prop));
     }
   }
 
-  return dupes;
+  return result;
 }
 
 // you should be able to square each number in an array

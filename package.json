@@ -4,18 +4,11 @@
   "description": "TDD approach to assessing a developers javascript knowledge",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test:coverage": "jest --coverage",
-    "test:watch": "jest --watchAll"
+    "test": "vitest"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "jest": "^27.5.1"
-  },
   "devDependencies": {
-    "@babel/core": "^7.17.2",
-    "@babel/preset-env": "^7.16.11",
-    "babel-jest": "^27.5.1"
+    "vitest": "^2.1.1"
   }
 }

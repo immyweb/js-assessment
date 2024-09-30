@@ -1,7 +1,8 @@
-import { reverseInt } from "../exercises/numbers";
+import { describe, test, expect } from 'vitest';
+import { reverseInt } from '../exercises/numbers';
 
-describe("Numbers", () => {
-  test("you should be able to reverse an integer", () => {
+describe('Numbers', () => {
+  test('you should be able to reverse an integer', () => {
     expect(reverseInt(0)).toEqual(0);
     expect(reverseInt(5)).toEqual(5);
     expect(reverseInt(15)).toEqual(51);

@@ -33,8 +33,8 @@ export function makeClosures(arr, fn) {
     };
   };
 
-  arr.forEach((num, i) => {
-    ret.push(makeFn(arr[i]));
+  arr.forEach((num) => {
+    ret.push(makeFn(num));
   });
 
   return ret;

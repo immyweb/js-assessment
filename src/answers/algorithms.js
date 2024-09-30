@@ -16,7 +16,8 @@
 //       '##  '
 //       '### '
 //       '####'
-export function steps(n, row = 0, stair = "") {
+export function steps(n, row = 0, stair = '') {
+  // Base case. Stops once all rows have been processed.
   if (n === row) {
     return;
   }
@@ -27,9 +28,9 @@ export function steps(n, row = 0, stair = "") {
   }
 
   if (stair.length <= row) {
-    stair += "#";
+    stair += '#';
   } else {
-    stair += " ";
+    stair += ' ';
   }
   steps(n, row, stair);
 }
