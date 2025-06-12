@@ -17,13 +17,20 @@ export function alterObjects(constructor, greeting) {
 // Example:
 //   iterate(obj)=== ["foo: bar", "baz: bim"]
 export function iterate(obj) {
-  let res = [];
+  // 1. Using Object.keys() with map
+  return Object.keys(obj).map((key) => `${key}: ${obj[key]}`);
 
-  for (let prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
-      res.push(`${prop}: ${obj[prop]}`);
-    }
-  }
+  // 2. Using Object.entries() with map
+  // return Object.entries(obj).map(([key, value]) => `${key}: ${value}`);
 
-  return res;
+  // 3. Using for...in
+  // let res = [];
+
+  // for (let prop in obj) {
+  //   if (obj.hasOwnProperty(prop)) {
+  //     res.push(`${prop}: ${obj[prop]}`);
+  //   }
+  // }
+
+  // return res;
 }

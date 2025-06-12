@@ -5,8 +5,7 @@
 //   reverseString('hello') === 'olleh'
 //   reverseString('Greetings!') === '!sgniteerG'
 export function reverseString(str) {
-  const ret = str.split("").reverse().join("");
-  return ret;
+  return [...str].reverse().join('');
 }
 
 // Given a string, return true if the string is a palindrome
@@ -17,7 +16,7 @@ export function reverseString(str) {
 //   palindrome("abba") === true
 //   palindrome("abcdefg") === false
 export function palindrome(str) {
-  const reversed = str.split("").reverse().join("");
+  const reversed = [...str].reverse().join('');
 
   return str === reversed;
 }
@@ -28,25 +27,22 @@ export function palindrome(str) {
 // maxChar("abcccccccd") === "c"
 // maxChar("apple 1231111") === "1"
 export function maxChar(str) {
-  const charMap = {};
-  let maxCount = 0;
-  let maxChar;
+  const chars = {}; // 1. Create empty box to store counts
+  let maxChar = ''; // 2. Variable to remember the winner
+  let maxCount = 0; // 3. Variable to remember highest count
 
-  for (let char of str) {
-    if (charMap[char]) {
-      charMap[char]++;
-    } else {
-      charMap[char] = 1;
+  // 4. Look at each letter
+  for (const char of str) {
+    chars[char] = (chars[char] || 0) + 1; // 5. Count it
+
+    // 6. Is this a new record?
+    if (chars[char] > maxCount) {
+      maxCount = chars[char]; // 7. Update the record
+      maxChar = char; // 8. Remember the winner
     }
   }
 
-  for (let char in charMap) {
-    if (charMap[char] > maxCount) {
-      maxCount = charMap[char];
-      maxChar = char;
-    }
-  }
-  return maxChar;
+  return maxChar; // 9. Return the winner
 }
 
 // Check to see if two provided strings are anagrams of each other.
@@ -59,9 +55,7 @@ export function maxChar(str) {
 //   anagrams('Hi there', 'Bye there') --> False
 export function anagrams(stringA, stringB) {
   function sortString(str) {
-    const arr = str.toLowerCase().split("").sort().join("");
-
-    return arr;
+    return str.toLowerCase().split('').sort().join('');
   }
 
   return sortString(stringA) === sortString(stringB);
@@ -75,17 +69,10 @@ export function anagrams(stringA, stringB) {
 //   capitalize('a lazy fox') --> 'A Lazy Fox'
 //   capitalize('look, it is working!') --> 'Look, It Is Working!'
 export function capitalize(str) {
-  let result = str[0].toUpperCase();
-
-  for (let i = 1; i < str.length; i++) {
-    if (str[i - 1] === " ") {
-      result += str[i].toUpperCase();
-    } else {
-      result += str[i];
-    }
-  }
-
-  return result;
+  return str
+    .split(' ')
+    .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
 }
 
 // --- Directions
@@ -97,14 +84,14 @@ export function capitalize(str) {
 //   vowels('Why do you ask?') --> 4
 //   vowels('Why?') --> 0
 export function vowels(str) {
-  let vowels = 0;
-  const checker = ["a", "e", "i", "o", "u"];
+  const vowelSet = new Set(['a', 'e', 'i', 'o', 'u']);
+  let count = 0;
 
   for (let char of str.toLowerCase()) {
-    if (checker.includes(char)) {
-      vowels++;
+    if (vowelSet.has(char)) {
+      count++;
     }
   }
 
-  return vowels;
+  return count;
 }

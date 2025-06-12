@@ -1,13 +1,11 @@
 // you should be able to sum the items of an array
 export function sumArray(arr) {
-  const result = arr.reduce((a, b) => a + b);
-  return result;
+  return arr.reduce((a, b) => a + b);
 }
 
 // you should be able to remove all instances of a value from an array
 export function remove(arr, item) {
-  const result = arr.filter((num) => num !== item);
-  return result;
+  return arr.filter((num) => num !== item);
 }
 
 // you should be able to remove all instances of a value from an array, returning the original array
@@ -58,47 +56,32 @@ export function insert(arr, item, index) {
 
 // you should be able to count the occurences of an item in an array
 export function count(arr, item) {
-  let count = 0;
-  arr.forEach((i) => {
-    if (arr[i] === item) {
-      count++;
-    }
-  });
-  return count;
+  return arr.filter((num) => num === item).length;
 }
 
 // you should be able to find duplicates in an array
 export function duplicates(arr) {
-  let dupes = {};
-  let result = [];
+  const seen = new Set();
+  const duplicates = new Set();
 
-  arr.forEach((num) => {
-    if (dupes[num]) {
-      dupes[num]++;
+  for (const item of arr) {
+    if (seen.has(item)) {
+      duplicates.add(item);
     } else {
-      dupes[num] = 1;
-    }
-  });
-
-  for (let prop in dupes) {
-    if (dupes.hasOwnProperty(prop) && dupes[prop] > 1) {
-      result.push(parseInt(prop));
+      seen.add(item);
     }
   }
 
-  return result;
+  return [...duplicates];
 }
 
 // you should be able to square each number in an array
 export function square(arr) {
-  const newArr = arr.map((i) => {
-    return i * i;
-  });
-
-  return newArr;
+  return arr.map((num) => num * num);
 }
 
 // you should be able to find all occurrences of an item in an array
+// and return an array of index positions
 export function findAllOccurrences(arr, target) {
   let ret = [];
 
