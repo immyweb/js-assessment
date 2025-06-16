@@ -1,5 +1,15 @@
 import { describe, beforeEach, test, expect, vi } from 'vitest';
 import {
+  createObject,
+  getKeys,
+  getValues,
+  getEntries,
+  hasProperty,
+  copyProperties,
+  shallowCopy,
+  countProperties,
+  removeProperty,
+  createPersonWithAccessors,
   alterContext,
   alterObjects,
   iterate,
@@ -34,6 +44,110 @@ describe('Objects', () => {
       this.name = name;
       return this;
     };
+  });
+
+  describe('Fundamental Object Operations', () => {
+    test('should create object from key-value pairs', () => {
+      expect(createObject('name', 'Alice', 'age', 25)).toEqual({
+        name: 'Alice',
+        age: 25
+      });
+      expect(createObject('color', 'blue')).toEqual({ color: 'blue' });
+      expect(createObject()).toEqual({});
+      expect(createObject('a', 1, 'b', 2, 'c', 3)).toEqual({
+        a: 1,
+        b: 2,
+        c: 3
+      });
+    });
+
+    test('should return array of object keys', () => {
+      expect(getKeys({ name: 'Alice', age: 25 })).toEqual(['name', 'age']);
+      expect(getKeys({})).toEqual([]);
+      expect(getKeys({ a: 1, b: 2, c: 3 })).toEqual(['a', 'b', 'c']);
+    });
+
+    test('should return array of object values', () => {
+      expect(getValues({ name: 'Alice', age: 25 })).toEqual(['Alice', 25]);
+      expect(getValues({})).toEqual([]);
+      expect(getValues({ a: 1, b: 2, c: 3 })).toEqual([1, 2, 3]);
+    });
+
+    test('should return array of key-value pairs', () => {
+      expect(getEntries({ name: 'Alice', age: 25 })).toEqual([
+        ['name', 'Alice'],
+        ['age', 25]
+      ]);
+      expect(getEntries({})).toEqual([]);
+      expect(getEntries({ a: 1, b: 2 })).toEqual([
+        ['a', 1],
+        ['b', 2]
+      ]);
+    });
+
+    test('should check if object has property', () => {
+      const obj = { name: 'Alice', age: 25 };
+      expect(hasProperty(obj, 'name')).toBe(true);
+      expect(hasProperty(obj, 'age')).toBe(true);
+      expect(hasProperty(obj, 'city')).toBe(false);
+      expect(hasProperty({}, 'anything')).toBe(false);
+    });
+
+    test('should copy properties from source to target', () => {
+      const target = { a: 1 };
+      const source = { b: 2, c: 3 };
+      const result = copyProperties(target, source);
+      expect(result).toEqual({ a: 1, b: 2, c: 3 });
+      expect(target).toEqual({ a: 1, b: 2, c: 3 }); // target should be modified
+    });
+
+    test('should create shallow copy of object', () => {
+      const original = { name: 'Alice', age: 25, hobbies: ['reading'] };
+      const copy = shallowCopy(original);
+
+      expect(copy).toEqual(original);
+      expect(copy).not.toBe(original); // Different objects
+
+      // Test shallow copy behavior
+      copy.name = 'Bob';
+      expect(original.name).toBe('Alice'); // Original unchanged
+
+      // But nested objects are shared
+      copy.hobbies.push('coding');
+      expect(original.hobbies).toEqual(['reading', 'coding']); // Original affected
+    });
+
+    test('should count object properties', () => {
+      expect(countProperties({ name: 'Alice', age: 25 })).toBe(2);
+      expect(countProperties({})).toBe(0);
+      expect(countProperties({ a: 1, b: 2, c: 3, d: 4 })).toBe(4);
+    });
+
+    test('should remove property from object', () => {
+      const obj = { name: 'Alice', age: 25, city: 'NYC' };
+      const result = removeProperty(obj, 'age');
+      expect(result).toEqual({ name: 'Alice', city: 'NYC' });
+      expect(obj).toEqual({ name: 'Alice', city: 'NYC' }); // Original should be modified
+
+      // Test removing non-existent property
+      const result2 = removeProperty({ a: 1 }, 'b');
+      expect(result2).toEqual({ a: 1 });
+    });
+
+    test('should create object with getter and setter methods', () => {
+      const person = createPersonWithAccessors('Alice');
+
+      expect(typeof person.getName).toBe('function');
+      expect(typeof person.setName).toBe('function');
+
+      expect(person.getName()).toBe('Alice');
+
+      person.setName('Bob');
+      expect(person.getName()).toBe('Bob');
+
+      person.setName('Charlie');
+      expect(person.getName()).toBe('Charlie');
+    });
   });
 
   test('you should be able to alter the context in which a method runs', () => {

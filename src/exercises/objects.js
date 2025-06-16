@@ -1,3 +1,116 @@
+/**
+ * For each of the following exercises, write a function that returns
+ * the correct result.
+ *
+ * These exercises focus on fundamental object concepts in JavaScript.
+ * You'll need to understand object creation, property access, and object methods.
+ */
+
+/**
+ * Write a function that creates an object with the given properties.
+ *
+ * createObject('name', 'Alice', 'age', 25) // {name: 'Alice', age: 25}
+ * createObject('color', 'blue') // {color: 'blue'}
+ */
+export function createObject(...args) {
+  // TODO: Create object from key-value pairs
+}
+
+/**
+ * Write a function that returns an array of all the keys in an object.
+ *
+ * getKeys({name: 'Alice', age: 25}) // ['name', 'age']
+ * getKeys({}) // []
+ */
+export function getKeys(obj) {
+  // TODO: Return array of object keys
+}
+
+/**
+ * Write a function that returns an array of all the values in an object.
+ *
+ * getValues({name: 'Alice', age: 25}) // ['Alice', 25]
+ * getValues({}) // []
+ */
+export function getValues(obj) {
+  // TODO: Return array of object values
+}
+
+/**
+ * Write a function that returns an array of key-value pairs from an object.
+ *
+ * getEntries({name: 'Alice', age: 25}) // [['name', 'Alice'], ['age', 25]]
+ * getEntries({}) // []
+ */
+export function getEntries(obj) {
+  // TODO: Return array of [key, value] pairs
+}
+
+/**
+ * Write a function that checks if an object has a specific property.
+ *
+ * hasProperty({name: 'Alice', age: 25}, 'name') // true
+ * hasProperty({name: 'Alice'}, 'age') // false
+ */
+export function hasProperty(obj, prop) {
+  // TODO: Check if object has property
+}
+
+/**
+ * Write a function that copies all properties from one object to another.
+ *
+ * const target = {a: 1};
+ * const source = {b: 2, c: 3};
+ * copyProperties(target, source) // {a: 1, b: 2, c: 3}
+ */
+export function copyProperties(target, source) {
+  // TODO: Copy properties from source to target
+}
+
+/**
+ * Write a function that creates a shallow copy of an object.
+ *
+ * const original = {name: 'Alice', age: 25};
+ * const copy = shallowCopy(original);
+ * copy.name = 'Bob';
+ * original.name // still 'Alice'
+ */
+export function shallowCopy(obj) {
+  // TODO: Create shallow copy of object
+}
+
+/**
+ * Write a function that counts the number of properties in an object.
+ *
+ * countProperties({name: 'Alice', age: 25}) // 2
+ * countProperties({}) // 0
+ */
+export function countProperties(obj) {
+  // TODO: Count object properties
+}
+
+/**
+ * Write a function that removes a property from an object and returns the modified object.
+ *
+ * const obj = {name: 'Alice', age: 25, city: 'NYC'};
+ * removeProperty(obj, 'age') // {name: 'Alice', city: 'NYC'}
+ */
+export function removeProperty(obj, prop) {
+  // TODO: Remove property from object
+}
+
+/**
+ * Write a function that creates an object with getter and setter methods.
+ *
+ * const person = createPersonWithAccessors('Alice');
+ * person.getName() // 'Alice'
+ * person.setName('Bob');
+ * person.getName() // 'Bob'
+ */
+export function createPersonWithAccessors(initialName) {
+  // TODO: Create object with getter/setter methods
+}
+
 // you should be able to alter the context in which a method runs
 // Example:
 //   alterContext(fn, obj) === "Yo, Charlie!"

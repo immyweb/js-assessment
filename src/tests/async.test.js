@@ -1,25 +1,25 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
-  delay,
-  promisify,
-  fetchWithFallback,
+  createPromise,
+  promiseChain,
+  handleRejection,
   waitForAll,
-  raceToFinish,
+  waitForAllSettled,
+  racePromises,
+  promisify,
   processSequentially,
   withTimeout,
   retryOperation,
-  isPromise,
-  toPromise,
-  createAsyncCounter,
-  waitUntil,
-  loadResources,
-  chainAsync
+  delay,
+  fetchWithFallback,
+  sumAsyncIterable,
+  createCancellablePromise
 } from '../exercises/async.js';
 
 // Mock fetch for testing
 global.fetch = vi.fn();
 
-describe('async functions', () => {
+describe('Async Exercises', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
@@ -29,95 +29,95 @@ describe('async functions', () => {
     vi.useRealTimers();
   });
 
-  describe('delay', () => {
-    it('should delay execution for specified milliseconds', async () => {
-      const start = Date.now();
-      const delayPromise = delay(1000);
+  describe('createPromise', () => {
+    it('should create a promise that resolves with value after delay', async () => {
+      const promiseResult = createPromise('hello', 1000);
 
-      // Fast-forward time
+      expect(promiseResult).toBeInstanceOf(Promise);
+
+      // Should not resolve immediately
+      let resolved = false;
+      promiseResult.then(() => {
+        resolved = true;
+      });
+      expect(resolved).toBe(false);
+
       vi.advanceTimersByTime(1000);
-      await delayPromise;
+      const result = await promiseResult;
 
-      expect(vi.getTimerCount()).toBe(0);
+      expect(result).toBe('hello');
     });
 
-    it('should resolve with undefined', async () => {
-      const delayPromise = delay(500);
+    it('should handle different values and delays', async () => {
+      const promiseResult = createPromise(42, 500);
+
+      expect(promiseResult).toBeInstanceOf(Promise);
+
       vi.advanceTimersByTime(500);
-      const result = await delayPromise;
+      const result = await promiseResult;
 
-      expect(result).toBeUndefined();
+      expect(result).toBe(42);
     });
   });
 
-  describe('promisify', () => {
-    it('should convert callback function to promise-based function', async () => {
-      const callbackFn = (arg, callback) => {
-        setTimeout(() => callback(null, `result: ${arg}`), 100);
-      };
+  describe('promiseChain', () => {
+    it('should create a chainable promise', async () => {
+      const chainablePromise = promiseChain(5);
 
-      const promisifiedFn = promisify(callbackFn);
-      const resultPromise = promisifiedFn('test');
+      expect(chainablePromise).toBeInstanceOf(Promise);
+      expect(typeof chainablePromise.then).toBe('function');
 
-      vi.advanceTimersByTime(100);
-      const result = await resultPromise;
+      const result = await chainablePromise
+        .then((x) => x * 2)
+        .then((x) => x + 1)
+        .then((x) => x * 3);
 
-      expect(result).toBe('result: test');
+      expect(result).toBe(33); // ((5 * 2) + 1) * 3
     });
 
-    it('should reject promise when callback has error', async () => {
-      const callbackFn = (arg, callback) => {
-        setTimeout(() => callback(new Error('Test error')), 100);
-      };
+    it('should start with the initial value', async () => {
+      const chainablePromise = promiseChain(10);
+      expect(chainablePromise).toBeInstanceOf(Promise);
 
-      const promisifiedFn = promisify(callbackFn);
-      const resultPromise = promisifiedFn('test');
+      const result = await chainablePromise.then((x) => x - 5);
 
-      vi.advanceTimersByTime(100);
-
-      await expect(resultPromise).rejects.toThrow('Test error');
+      expect(result).toBe(5);
     });
   });
 
-  describe('fetchWithFallback', () => {
-    it('should return parsed JSON when fetch succeeds', async () => {
-      const mockData = { id: 1, name: 'Test' };
-      const mockResponse = {
-        json: vi.fn().mockResolvedValue(mockData)
-      };
+  describe('handleRejection', () => {
+    it('should return promise value when it resolves', async () => {
+      const successPromise = Promise.resolve('success');
+      const handledPromise = handleRejection(successPromise, 'default');
 
-      global.fetch.mockResolvedValue(mockResponse);
+      expect(handledPromise).toBeInstanceOf(Promise);
+      const result = await handledPromise;
 
-      const result = await fetchWithFallback(
-        'https://api.test.com',
-        'fallback'
-      );
-
-      expect(result).toEqual(mockData);
-      expect(global.fetch).toHaveBeenCalledWith('https://api.test.com');
+      expect(result).toBe('success');
     });
 
-    it('should return fallback data when fetch fails', async () => {
-      global.fetch.mockRejectedValue(new Error('Network error'));
+    it('should return default value when promise rejects', async () => {
+      const rejectPromise = Promise.reject(new Error('failed'));
+      const handledPromise = handleRejection(rejectPromise, 'default');
 
-      const result = await fetchWithFallback(
-        'https://api.test.com',
-        'fallback data'
-      );
+      expect(handledPromise).toBeInstanceOf(Promise);
+      const result = await handledPromise;
 
-      expect(result).toBe('fallback data');
+      expect(result).toBe('default');
     });
   });
 
   describe('waitForAll', () => {
-    it('should wait for all promises to complete and return results in order', async () => {
-      const promise1 = Promise.resolve('result1');
-      const promise2 = Promise.resolve('result2');
-      const promise3 = Promise.resolve('result3');
+    it('should wait for all promises and return results in order', async () => {
+      const promises = [
+        Promise.resolve('first'),
+        Promise.resolve('second'),
+        Promise.resolve('third')
+      ];
 
-      const result = await waitForAll([promise1, promise2, promise3]);
+      const result = await waitForAll(promises);
 
-      expect(result).toEqual(['result1', 'result2', 'result3']);
+      expect(result).toEqual(['first', 'second', 'third']);
     });
 
     it('should handle empty array', async () => {
@@ -126,17 +126,54 @@ describe('async functions', () => {
     });
 
     it('should reject if any promise rejects', async () => {
-      const promise1 = Promise.resolve('result1');
-      const promise2 = Promise.reject(new Error('Error'));
-      const promise3 = Promise.resolve('result3');
+      const promises = [
+        Promise.resolve('success'),
+        Promise.reject(new Error('failed'))
+      ];
 
-      await expect(waitForAll([promise1, promise2, promise3])).rejects.toThrow(
-        'Error'
-      );
+      await expect(waitForAll(promises)).rejects.toThrow('failed');
     });
   });
 
-  describe('raceToFinish', () => {
+  describe('waitForAllSettled', () => {
+    it('should categorize fulfilled and rejected promises', async () => {
+      const promises = [
+        Promise.resolve('success1'),
+        Promise.reject(new Error('error1')),
+        Promise.resolve('success2'),
+        Promise.reject(new Error('error2'))
+      ];
+
+      const result = await waitForAllSettled(promises);
+
+      expect(result.fulfilled).toEqual(['success1', 'success2']);
+      expect(result.rejected).toHaveLength(2);
+      expect(result.rejected[0]).toBeInstanceOf(Error);
+      expect(result.rejected[1]).toBeInstanceOf(Error);
+    });
+
+    it('should handle all fulfilled promises', async () => {
+      const promises = [Promise.resolve('a'), Promise.resolve('b')];
+      const result = await waitForAllSettled(promises);
+
+      expect(result.fulfilled).toEqual(['a', 'b']);
+      expect(result.rejected).toEqual([]);
+    });
+
+    it('should handle all rejected promises', async () => {
+      const promises = [
+        Promise.reject(new Error('error1')),
+        Promise.reject(new Error('error2'))
+      ];
+
+      const result = await waitForAllSettled(promises);
+
+      expect(result.fulfilled).toEqual([]);
+      expect(result.rejected).toHaveLength(2);
+    });
+  });
+
+  describe('racePromises', () => {
     it('should return the first resolved promise', async () => {
       const slowPromise = new Promise((resolve) =>
         setTimeout(() => resolve('slow'), 1000)
@@ -145,7 +182,7 @@ describe('async functions', () => {
         setTimeout(() => resolve('fast'), 100)
       );
 
-      const resultPromise = raceToFinish([slowPromise, fastPromise]);
+      const resultPromise = racePromises([slowPromise, fastPromise]);
       vi.advanceTimersByTime(100);
       const result = await resultPromise;
 
@@ -153,30 +190,79 @@ describe('async functions', () => {
     });
   });
 
+  describe('promisify', () => {
+    it('should convert callback function to promise', async () => {
+      const callbackFn = (x, callback) => {
+        setTimeout(() => callback(null, x * 2), 100);
+      };
+
+      const promisifiedFn = promisify(callbackFn);
+      const resultPromise = promisifiedFn(5);
+
+      vi.advanceTimersByTime(100);
+      const result = await resultPromise;
+
+      expect(result).toBe(10);
+    });
+
+    it('should reject when callback has error', async () => {
+      const callbackFn = (x, callback) => {
+        setTimeout(() => callback(new Error('Test error')), 100);
+      };
+
+      const promisifiedFn = promisify(callbackFn);
+      const resultPromise = promisifiedFn(5);
+
+      vi.advanceTimersByTime(100);
+
+      await expect(resultPromise).rejects.toThrow('Test error');
+    });
+  });
+
   describe('processSequentially', () => {
-    it('should process items one at a time and return results', async () => {
+    it('should process items one after another', async () => {
       const items = [1, 2, 3];
-      const asyncCallback = vi.fn(async (num) => {
-        return num * 2;
+      const results = [];
+
+      const processingPromise = processSequentially(items, async (num) => {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        results.push(num);
       });
 
-      const result = await processSequentially(items, asyncCallback);
+      expect(processingPromise).toBeInstanceOf(Promise);
+      await processingPromise;
 
-      expect(result).toEqual([2, 4, 6]);
-      expect(asyncCallback).toHaveBeenCalledTimes(3);
+      expect(results).toEqual([1, 2, 3]);
     });
 
     it('should handle empty array', async () => {
-      const asyncCallback = vi.fn();
-      const result = await processSequentially([], asyncCallback);
+      const callback = vi.fn();
 
-      expect(result).toEqual([]);
-      expect(asyncCallback).not.toHaveBeenCalled();
+      // Track that the function actually processes the array
+      let processingStarted = false;
+      const trackingCallback = vi.fn(async (...args) => {
+        processingStarted = true;
+        return callback(...args);
+      });
+
+      const result = await processSequentially([], trackingCallback);
+
+      expect(callback).not.toHaveBeenCalled();
+      expect(trackingCallback).not.toHaveBeenCalled();
+
+      // The function should complete and return undefined
+      expect(result).toBeUndefined();
+
+      // But it should have actually processed the empty array (not just returned immediately)
+      // This can be verified by checking that a non-empty array would work
+      const testCallback = vi.fn();
+      await processSequentially([1], testCallback);
+      expect(testCallback).toHaveBeenCalledWith(1);
     });
   });
 
   describe('withTimeout', () => {
-    it('should resolve with promise result if it completes before timeout', async () => {
+    it('should resolve when promise completes before timeout', async () => {
       const fastPromise = new Promise((resolve) =>
         setTimeout(() => resolve('success'), 100)
       );
@@ -188,7 +274,7 @@ describe('async functions', () => {
       expect(result).toBe('success');
     });
 
-    it('should reject with timeout error if promise takes too long', async () => {
+    it('should reject with timeout error when promise is too slow', async () => {
       const slowPromise = new Promise((resolve) =>
         setTimeout(() => resolve('success'), 2000)
       );
@@ -196,17 +282,17 @@ describe('async functions', () => {
       const resultPromise = withTimeout(slowPromise, 1000);
       vi.advanceTimersByTime(1000);
 
-      await expect(resultPromise).rejects.toThrow('Operation timed out');
+      await expect(resultPromise).rejects.toThrow('Timeout');
     });
   });
 
   describe('retryOperation', () => {
     beforeEach(() => {
-      vi.useRealTimers(); // Use real timers for retry tests
+      vi.useRealTimers();
     });
 
     afterEach(() => {
-      vi.useFakeTimers(); // Go back to fake timers
+      vi.useFakeTimers();
     });
 
     it('should return result on first success', async () => {
@@ -221,8 +307,8 @@ describe('async functions', () => {
     it('should retry on failure and eventually succeed', async () => {
       const unstableFn = vi
         .fn()
-        .mockRejectedValueOnce(new Error('Attempt 1 failed'))
-        .mockRejectedValueOnce(new Error('Attempt 2 failed'))
+        .mockRejectedValueOnce(new Error('Attempt 1'))
+        .mockRejectedValueOnce(new Error('Attempt 2'))
         .mockResolvedValue('success');
 
       const result = await retryOperation(unstableFn, 3);
@@ -241,180 +327,125 @@ describe('async functions', () => {
     });
   });
 
-  describe('isPromise', () => {
-    it('should return true for promises', () => {
-      expect(isPromise(Promise.resolve(42))).toBe(true);
-      expect(isPromise(new Promise(() => {}))).toBe(true);
-    });
+  describe('delay', () => {
+    it('should create a delay that resolves after specified time', async () => {
+      const delayPromise = delay(1000);
 
-    it('should return true for thenable objects', () => {
-      const thenable = { then: () => {} };
-      expect(isPromise(thenable)).toBe(true);
-    });
+      expect(delayPromise).toBeInstanceOf(Promise);
 
-    it('should return false for non-promises', () => {
-      expect(isPromise(42)).toBe(false);
-      expect(isPromise('string')).toBe(false);
-      expect(isPromise({})).toBe(false);
-      expect(isPromise(null)).toBe(false);
-      expect(isPromise(undefined)).toBe(false);
-    });
-  });
-
-  describe('toPromise', () => {
-    it('should return the same promise if value is already a promise', async () => {
-      const originalPromise = Promise.resolve(42);
-      const result = toPromise(originalPromise);
-
-      expect(result).toBe(originalPromise);
-      expect(await result).toBe(42);
-    });
-
-    it('should wrap non-promise values in Promise.resolve', async () => {
-      const result = toPromise(42);
-
-      expect(isPromise(result)).toBe(true);
-      expect(await result).toBe(42);
-    });
-  });
-
-  describe('createAsyncCounter', () => {
-    it('should start with default value 0', async () => {
-      const counter = createAsyncCounter();
-
-      const valuePromise = counter.getValue();
-      const value = await valuePromise;
-
-      expect(value).toBe(0);
-    });
-
-    it('should start with provided initial value', async () => {
-      const counter = createAsyncCounter(10);
-
-      const value = await counter.getValue();
-
-      expect(value).toBe(10);
-    });
-
-    it('should increment and return new value', async () => {
-      const counter = createAsyncCounter(5);
-
-      const incrementPromise = counter.increment();
-      vi.advanceTimersByTime(100);
-      const result = await incrementPromise;
-
-      expect(result).toBe(6);
-    });
-
-    it('should decrement and return new value', async () => {
-      const counter = createAsyncCounter(5);
-
-      const decrementPromise = counter.decrement();
-      vi.advanceTimersByTime(100);
-      const result = await decrementPromise;
-
-      expect(result).toBe(4);
-    });
-  });
-
-  describe('waitUntil', () => {
-    beforeEach(() => {
-      vi.useRealTimers(); // Use real timers for waitUntil tests
-    });
-
-    afterEach(() => {
-      vi.useFakeTimers(); // Go back to fake timers
-    });
-
-    it('should resolve when condition becomes true', async () => {
-      let condition = false;
-      setTimeout(() => {
-        condition = true;
-      }, 250);
-
-      await waitUntil(() => condition);
-
-      expect(condition).toBe(true);
-    });
-
-    it('should use custom check interval', async () => {
-      let checks = 0;
-      const conditionFn = vi.fn(() => {
-        checks++;
-        return checks >= 3;
+      // Should not resolve immediately
+      let resolved = false;
+      delayPromise.then(() => {
+        resolved = true;
       });
+      expect(resolved).toBe(false);
 
-      await waitUntil(conditionFn, 50);
+      vi.advanceTimersByTime(1000);
+      await delayPromise;
 
-      expect(conditionFn).toHaveBeenCalledTimes(3);
+      expect(vi.getTimerCount()).toBe(0);
+    });
+
+    it('should resolve with undefined', async () => {
+      const delayPromise = delay(500);
+      expect(delayPromise).toBeInstanceOf(Promise);
+
+      vi.advanceTimersByTime(500);
+      const result = await delayPromise;
+
+      expect(result).toBeUndefined();
     });
   });
 
-  describe('loadResources', () => {
-    it('should load multiple resources in parallel', async () => {
-      const resourceMap = {
-        user: vi.fn().mockResolvedValue({ id: 1, name: 'John' }),
-        posts: vi.fn().mockResolvedValue([{ id: 1, title: 'Post 1' }])
+  describe('fetchWithFallback', () => {
+    it('should return parsed JSON when fetch succeeds', async () => {
+      const mockData = { id: 1, name: 'Test' };
+      const mockResponse = {
+        json: vi.fn().mockResolvedValue(mockData)
       };
 
-      const result = await loadResources(resourceMap);
+      global.fetch.mockResolvedValue(mockResponse);
 
-      expect(result).toEqual({
-        user: { id: 1, name: 'John' },
-        posts: [{ id: 1, title: 'Post 1' }]
-      });
-      expect(resourceMap.user).toHaveBeenCalledTimes(1);
-      expect(resourceMap.posts).toHaveBeenCalledTimes(1);
+      const result = await fetchWithFallback('/api/data', 'fallback');
+
+      expect(result).toEqual(mockData);
+      expect(global.fetch).toHaveBeenCalledWith('/api/data');
     });
 
-    it('should handle empty resource map', async () => {
-      const result = await loadResources({});
-      expect(result).toEqual({});
+    it('should return fallback data when fetch fails', async () => {
+      global.fetch.mockRejectedValue(new Error('Network error'));
+
+      const result = await fetchWithFallback('/api/data', 'fallback data');
+
+      expect(result).toBe('fallback data');
     });
   });
 
-  describe('chainAsync', () => {
-    it('should chain async operations', async () => {
-      const step1 = vi.fn(async (x) => x * 2);
-      const step2 = vi.fn(async (x) => x + 10);
-      const step3 = vi.fn(async (x) => `Result: ${x}`);
+  describe('sumAsyncIterable', () => {
+    it('should sum values from async iterable', async () => {
+      async function* numbers() {
+        yield 1;
+        yield 2;
+        yield 3;
+        yield 4;
+      }
 
-      const result = await chainAsync(5)
-        .then(step1)
-        .then(step2)
-        .then(step3)
-        .execute();
+      const sumPromise = sumAsyncIterable(numbers());
+      expect(sumPromise).toBeInstanceOf(Promise);
 
-      expect(result).toBe('Result: 20');
-      expect(step1).toHaveBeenCalledWith(5);
-      expect(step2).toHaveBeenCalledWith(10);
-      expect(step3).toHaveBeenCalledWith(20);
+      const result = await sumPromise;
+
+      expect(result).toBe(10);
+      expect(typeof result).toBe('number');
     });
 
-    it('should handle error with catch', async () => {
-      const step1 = vi.fn(async () => {
-        throw new Error('Step 1 failed');
-      });
-      const errorHandler = vi.fn(async (error) => 'Error handled');
+    it('should handle empty async iterable', async () => {
+      async function* empty() {
+        // yields nothing
+      }
 
-      const result = await chainAsync(5)
-        .then(step1)
-        .catch(errorHandler)
-        .execute();
+      const sumPromise = sumAsyncIterable(empty());
+      expect(sumPromise).toBeInstanceOf(Promise);
 
-      expect(result).toBe('Error handled');
-      expect(errorHandler).toHaveBeenCalledWith(expect.any(Error));
+      const result = await sumPromise;
+
+      expect(result).toBe(0);
+      expect(typeof result).toBe('number');
+    });
+  });
+
+  describe('createCancellablePromise', () => {
+    it('should resolve normally when not aborted', async () => {
+      const controller = new AbortController();
+      const promise = createCancellablePromise(100, controller.signal);
+
+      expect(promise).toBeInstanceOf(Promise);
+
+      vi.advanceTimersByTime(100);
+      await expect(promise).resolves.toBeUndefined();
     });
 
-    it('should execute finally block', async () => {
-      const finallyHandler = vi.fn();
+    it('should reject when aborted before completion', async () => {
+      const controller = new AbortController();
+      const promise = createCancellablePromise(1000, controller.signal);
 
-      await chainAsync(5)
-        .then(async (x) => x * 2)
-        .finally(finallyHandler)
-        .execute();
+      expect(promise).toBeInstanceOf(Promise);
 
-      expect(finallyHandler).toHaveBeenCalledTimes(1);
+      // Abort after 500ms
+      vi.advanceTimersByTime(500);
+      controller.abort();
+
+      await expect(promise).rejects.toThrow('Operation aborted');
+    });
+
+    it('should reject immediately if already aborted', async () => {
+      const controller = new AbortController();
+      controller.abort();
+
+      const promise = createCancellablePromise(1000, controller.signal);
+      expect(promise).toBeInstanceOf(Promise);
+
+      await expect(promise).rejects.toThrow('Operation aborted');
     });
   });
 });

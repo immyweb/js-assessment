@@ -49,3 +49,102 @@ export function partialUsingArguments(fn) {}
 // Example:
 //   curryIt(fn)(4)(2)(1) === 2
 export function curryIt(fn) {}
+
+/**
+ * Write a function that demonstrates the difference between arrow functions
+ * and regular functions with 'this' binding. Return an object with methods
+ * that show how 'this' behaves differently.
+ *
+ * const example = createThisExample();
+ * example.regularMethod(); // 'this' refers to the object
+ * example.arrowMethod(); // 'this' refers to lexical scope
+ */
+export function createThisExample() {
+  // TODO: Create object with regular and arrow function methods
+}
+
+/**
+ * Write a function that demonstrates function hoisting by calling
+ * a function before it's declared in the code.
+ *
+ * demonstrateHoisting(); // returns "Hoisting works!"
+ */
+export function demonstrateHoisting() {
+  // TODO: Call a function that's declared later in the same scope
+}
+
+/**
+ * Create an IIFE that returns a counter function with private state.
+ * The counter should increment each time it's called.
+ *
+ * const counter = createPrivateCounter();
+ * counter(); // 1
+ * counter(); // 2
+ * counter(); // 3
+ */
+export function createPrivateCounter() {
+  // TODO: Implement IIFE pattern that returns a counter function
+}
+
+/**
+ * Write a function that accepts another function as an argument,
+ * stores it in a variable, and returns a new function that calls
+ * the original function with additional behavior.
+ *
+ * const double = x => x * 2;
+ * const logged = functionAsValue(double);
+ * logged(5); // logs "Calling function" and returns 10
+ */
+export function functionAsValue(fn) {
+  // TODO: Demonstrate functions as values
+}
+
+/**
+ * Write a function that uses rest parameters to accept any number
+ * of arguments and returns their sum.
+ *
+ * sumAll(1, 2, 3); // 6
+ * sumAll(10, 20); // 30
+ * sumAll(); // 0
+ */
+export function sumAll(...args) {
+  // TODO: Use rest parameters
+}
+
+/**
+ * Write a function with default parameters that creates a greeting.
+ * Default name should be "World" and default greeting should be "Hello".
+ *
+ * createGreeting(); // "Hello, World!"
+ * createGreeting("Hi", "Alice"); // "Hi, Alice!"
+ * createGreeting("Hey"); // "Hey, World!"
+ */
+export function createGreeting(greeting = 'Hello', name = 'World') {
+  // TODO: Use default parameters
+}
+
+/**
+ * Create an object using ES6 method shorthand syntax instead of
+ * traditional function property assignment.
+ *
+ * const obj = createObjectWithMethods();
+ * obj.sayHello(); // "Hello from method!"
+ * obj.calculate(5, 3); // 8
+ */
+export function createObjectWithMethods() {
+  // TODO: Use ES6 method shorthand
+}
+
+/**
+ * Demonstrate the difference between function declarations,
+ * function expressions, and the Function constructor by returning
+ * an object with examples of each.
+ *
+ * const types = compareFunctionTypes();
+ * types.declaration(); // "I'm a declaration"
+ * types.expression(); // "I'm an expression"
+ * types.constructor(); // "I'm from constructor"
+ */
+export function compareFunctionTypes() {
+  // TODO: Show different ways to create functions
+}

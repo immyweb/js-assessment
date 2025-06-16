@@ -1,4 +1,4 @@
-import { describe, beforeEach, test, expect } from 'vitest';
+import { describe, beforeEach, test, expect, vi } from 'vitest';
 import {
   argsAsArray,
   speak,
@@ -8,7 +8,15 @@ import {
   useArguments,
   callIt,
   partialUsingArguments,
-  curryIt
+  curryIt,
+  createThisExample,
+  demonstrateHoisting,
+  createPrivateCounter,
+  functionAsValue,
+  sumAll,
+  createGreeting,
+  createObjectWithMethods,
+  compareFunctionTypes
 } from '../exercises/functions';
 
 describe('Functions', () => {
@@ -150,5 +158,197 @@ describe('Functions', () => {
     result = curryIt(curryMe)(a)(b)(c);
     expect(typeof result).toEqual('number');
     expect(result).toEqual(curryMe(a, b, c));
+  });
+
+  describe('createThisExample', () => {
+    test('should return an object with regular and arrow methods', () => {
+      const example = createThisExample();
+      expect(example).toHaveProperty('regularMethod');
+      expect(example).toHaveProperty('arrowMethod');
+      expect(typeof example.regularMethod).toBe('function');
+      expect(typeof example.arrowMethod).toBe('function');
+    });
+
+    test('should demonstrate different this binding behavior', () => {
+      const example = createThisExample();
+      const regularResult = example.regularMethod();
+      const arrowResult = example.arrowMethod();
+      
+      // Results should be different to show this binding difference
+      expect(regularResult).not.toBe(arrowResult);
+    });
+  });
+
+  describe('demonstrateHoisting', () => {
+    test('should successfully call a hoisted function', () => {
+      const result = demonstrateHoisting();
+      expect(result).toBeDefined();
+      expect(typeof result).toBe('string');
+    });
+
+    test('should return expected hoisting message', () => {
+      const result = demonstrateHoisting();
+      expect(result).toContain('Hoisting');
+    });
+  });
+
+  describe('createPrivateCounter', () => {
+    test('should return a function', () => {
+      const counter = createPrivateCounter();
+      expect(typeof counter).toBe('function');
+    });
+
+    test('should increment count on each call', () => {
+      const counter = createPrivateCounter();
+      expect(counter()).toBe(1);
+      expect(counter()).toBe(2);
+      expect(counter()).toBe(3);
+    });
+
+    test('should maintain separate state for different counters', () => {
+      const counter1 = createPrivateCounter();
+      const counter2 = createPrivateCounter();
+      
+      expect(counter1()).toBe(1);
+      expect(counter2()).toBe(1);
+      expect(counter1()).toBe(2);
+      expect(counter2()).toBe(2);
+    });
+  });
+
+  describe('functionAsValue', () => {
+    test('should accept a function as parameter', () => {
+      const testFn = vi.fn(() => 'test');
+      const result = functionAsValue(testFn);
+      expect(typeof result).toBe('function');
+    });
+
+    test('should return a function that calls the original', () => {
+      const double = (x) => x * 2;
+      const enhanced = functionAsValue(double);
+      const result = enhanced(5);
+      expect(result).toBe(10);
+    });
+
+    test('should add additional behavior to the function', () => {
+      const mockFn = vi.fn((x) => x);
+      const enhanced = functionAsValue(mockFn);
+      enhanced(42);
+      expect(mockFn).toHaveBeenCalledWith(42);
+    });
+  });
+
+  describe('sumAll', () => {
+    test('should sum multiple numbers', () => {
+      expect(sumAll(1, 2, 3)).toBe(6);
+      expect(sumAll(10, 20)).toBe(30);
+      expect(sumAll(1, 2, 3, 4, 5)).toBe(15);
+    });
+
+    test('should return 0 for no arguments', () => {
+      expect(sumAll()).toBe(0);
+    });
+
+    test('should handle single argument', () => {
+      expect(sumAll(42)).toBe(42);
+    });
+
+    test('should handle negative numbers', () => {
+      expect(sumAll(-1, -2, -3)).toBe(-6);
+      expect(sumAll(5, -3, 2)).toBe(4);
+    });
+  });
+
+  describe('createGreeting', () => {
+    test('should use default parameters', () => {
+      expect(createGreeting()).toBe('Hello, World!');
+    });
+
+    test('should use custom greeting with default name', () => {
+      expect(createGreeting('Hi')).toBe('Hi, World!');
+    });
+
+    test('should use custom greeting and name', () => {
+      expect(createGreeting('Hey', 'Alice')).toBe('Hey, Alice!');
+    });
+
+    test('should handle empty strings', () => {
+      expect(createGreeting('', 'Bob')).toBe(', Bob!');
+      expect(createGreeting('Hello', '')).toBe('Hello, !');
+    });
+  });
+
+  describe('createObjectWithMethods', () => {
+    test('should return an object with methods', () => {
+      const obj = createObjectWithMethods();
+      expect(typeof obj).toBe('object');
+      expect(typeof obj.sayHello).toBe('function');
+      expect(typeof obj.calculate).toBe('function');
+    });
+
+    test('should have working sayHello method', () => {
+      const obj = createObjectWithMethods();
+      const result = obj.sayHello();
+      expect(result).toContain('Hello');
+    });
+
+    test('should have working calculate method', () => {
+      const obj = createObjectWithMethods();
+      const result = obj.calculate(5, 3);
+      expect(result).toBe(8);
+    });
+
+    test('should use method shorthand syntax', () => {
+      const obj = createObjectWithMethods();
+      // Check that methods are actually functions on the object
+      expect(obj.hasOwnProperty('sayHello')).toBe(true);
+      expect(obj.hasOwnProperty('calculate')).toBe(true);
+    });
+  });
+
+  describe('compareFunctionTypes', () => {
+    test('should return an object with three function types', () => {
+      const types = compareFunctionTypes();
+      expect(typeof types).toBe('object');
+      expect(typeof types.declaration).toBe('function');
+      expect(typeof types.expression).toBe('function');
+      expect(typeof types.constructor).toBe('function');
+    });
+
+    test('should have working declaration function', () => {
+      const types = compareFunctionTypes();
+      const result = types.declaration();
+      expect(result).toContain('declaration');
+    });
+
+    test('should have working expression function', () => {
+      const types = compareFunctionTypes();
+      const result = types.expression();
+      expect(result).toContain('expression');
+    });
+
+    test('should have working constructor function', () => {
+      const types = compareFunctionTypes();
+      const result = types.constructor();
+      expect(result).toContain('constructor');
+    });
+
+    test('should demonstrate different function creation methods', () => {
+      const types = compareFunctionTypes();
+      
+      // All should be functions but created differently
+      expect(typeof types.declaration).toBe('function');
+      expect(typeof types.expression).toBe('function');
+      expect(typeof types.constructor).toBe('function');
+      
+      // Results should be different to show the distinction
+      const results = [
+        types.declaration(),
+        types.expression(),
+        types.constructor()
+      ];
+      
+      expect(new Set(results).size).toBe(3); // All different results
+    });
   });
 });
