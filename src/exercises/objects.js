@@ -4,7 +4,16 @@
  *
  * These exercises focus on fundamental object concepts in JavaScript.
  * You'll need to understand object creation, property access, and object methods.
+ *
+ * The exercises are organized by difficulty and concept:
+ * 1. Basic Object Operations
+ * 2. Object Copying & Property Manipulation
+ * 3. Object Methods & Context
+ * 4. Advanced Object Patterns
+ * 5. Functional Programming with Objects
  */
+
+// ===== BASIC OBJECT OPERATIONS =====
 
 /**
  * Write a function that creates an object with the given properties.
@@ -57,6 +66,34 @@ export function hasProperty(obj, prop) {
 }
 
 /**
+ * Write a function that counts the number of properties in an object.
+ *
+ * countProperties({name: 'Alice', age: 25}) // 2
+ * countProperties({}) // 0
+ */
+export function countProperties(obj) {
+  // TODO: Count object properties
+}
+
+/**
+ * Write a function that removes a property from an object and returns the modified object.
+ *
+ * const obj = {name: 'Alice', age: 25, city: 'NYC'};
+ * removeProperty(obj, 'age') // {name: 'Alice', city: 'NYC'}
+ */
+export function removeProperty(obj, prop) {
+  // TODO: Remove property from object
+}
+
+// you should be able to iterate over an object's "own" properties
+// and return an array of properties.
+// Example:
+//   iterate(obj) === ["foo: bar", "baz: bim"]
+export function iterate(obj) {}
+
+// ===== OBJECT COPYING & PROPERTY MANIPULATION =====
+
+/**
  * Write a function that copies all properties from one object to another.
  *
  * const target = {a: 1};
@@ -79,25 +116,12 @@ export function shallowCopy(obj) {
   // TODO: Create shallow copy of object
 }
 
-/**
- * Write a function that counts the number of properties in an object.
- *
- * countProperties({name: 'Alice', age: 25}) // 2
- * countProperties({}) // 0
- */
-export function countProperties(obj) {
-  // TODO: Count object properties
-}
+// you should be able to freeze an object deeply (including nested objects)
+// Example:
+//   deepFreeze(obj) makes obj and all nested objects immutable
+export function deepFreeze(obj) {}
 
-/**
- * Write a function that removes a property from an object and returns the modified object.
- *
- * const obj = {name: 'Alice', age: 25, city: 'NYC'};
- * removeProperty(obj, 'age') // {name: 'Alice', city: 'NYC'}
- */
-export function removeProperty(obj, prop) {
-  // TODO: Remove property from object
-}
+// ===== OBJECT METHODS & CONTEXT =====
 
 /**
  * Write a function that creates an object with getter and setter methods.
@@ -121,11 +145,7 @@ export function alterContext(fn, obj) {}
 //   new Constructor("ellie").greeting === "Whats up"
 export function alterObjects(constructor, greeting) {}
 
-// you should be able to iterate over an object's "own" properties
-// and return an array of properties.
-// Example:
-//   iterate(obj) === ["foo: bar", "baz: bim"]
-export function iterate(obj) {}
+// ===== ADVANCED OBJECT PATTERNS =====
 
 // you should be able to bind arguments to a function permanently
 // Example:
@@ -146,16 +166,13 @@ export function createCounter() {}
 //   logged.name; // logs "Accessed property: name"
 export function createLoggingProxy(obj) {}
 
-// you should be able to freeze an object deeply (including nested objects)
-// Example:
-//   deepFreeze(obj) makes obj and all nested objects immutable
-export function deepFreeze(obj) {}
-
 // you should be able to create a factory function with private methods
 // Example:
 //   const person = createPerson("Alice", 25);
 //   person.getInfo() === "Alice is 25 years old"
 export function createPerson(name, age) {}
+
+// ===== FUNCTIONAL PROGRAMMING WITH OBJECTS =====
 
 // you should be able to chain method calls fluently
 // Example:
