@@ -212,6 +212,8 @@ export function flatten(arr) {}
 //   slice([1, 2, 3, 4, 5], 2) === [3, 4, 5]
 export function slice(arr, start, end) {}
 
+// ==== ARRAY CHUNKING ====
+
 // Given an array and chunk size, divide the array into many subarrays
 // where each subarray is of length size
 // --- Examples
