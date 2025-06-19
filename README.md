@@ -32,24 +32,6 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 
 ❌ Critical Gaps
 
-### ES6+ Modern Features
-
-- Symbols and their use cases
-- Proxy and Reflect APIs
-- WeakMap and WeakSet
-- Map and Set data structures
-- Template literals and tagged templates
-- Destructuring assignment (basic and advanced patterns)
-- Spread/rest operators (beyond basic function parameters)
-- Module System & Code Organization
-
-### ES6 modules (import/export)
-
-- CommonJS modules
-- Dynamic imports
-- Module patterns and namespacing
-- Tree shaking considerations
-
 ### Memory Management & Performance
 
 - Garbage collection understanding

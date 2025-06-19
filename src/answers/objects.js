@@ -22,7 +22,13 @@
  * createObject('color', 'blue') // {color: 'blue'}
  */
 export function createObject(...args) {
-  // TODO: Create object from key-value pairs
+  const pairs = [];
+  for (let i = 0; i < args.length; i += 2) {
+    if (i + 1 < args.length) {
+      pairs.push([args[i], args[i + 1]]);
+    }
+  }
+  return Object.fromEntries(pairs);
 }
 
 /**
@@ -32,7 +38,7 @@ export function createObject(...args) {
  * getKeys({}) // []
  */
 export function getKeys(obj) {
-  // TODO: Return array of object keys
+  return Object.keys(obj);
 }
 
 /**
@@ -42,7 +48,7 @@ export function getKeys(obj) {
  * getValues({}) // []
  */
 export function getValues(obj) {
-  // TODO: Return array of object values
+  return Object.values(obj);
 }
 
 /**
@@ -52,7 +58,7 @@ export function getValues(obj) {
  * getEntries({}) // []
  */
 export function getEntries(obj) {
-  // TODO: Return array of [key, value] pairs
+  return Object.entries(obj);
 }
 
 /**
@@ -62,7 +68,7 @@ export function getEntries(obj) {
  * hasProperty({name: 'Alice'}, 'age') // false
  */
 export function hasProperty(obj, prop) {
-  // TODO: Check if object has property
+  return Object.hasOwn(obj, prop);
 }
 
 /**
@@ -72,7 +78,7 @@ export function hasProperty(obj, prop) {
  * countProperties({}) // 0
  */
 export function countProperties(obj) {
-  // TODO: Count object properties
+  return Object.getOwnPropertyNames(obj).length;
 }
 
 /**
@@ -82,7 +88,8 @@ export function countProperties(obj) {
  * removeProperty(obj, 'age') // {name: 'Alice', city: 'NYC'}
  */
 export function removeProperty(obj, prop) {
-  // TODO: Remove property from object
+  delete obj[prop];
+  return obj;
 }
 
 // you should be able to iterate over an object's "own" properties
@@ -90,22 +97,7 @@ export function removeProperty(obj, prop) {
 // Example:
 //   iterate(obj)=== ["foo: bar", "baz: bim"]
 export function iterate(obj) {
-  // 1. Using Object.keys() with map
   return Object.keys(obj).map((key) => `${key}: ${obj[key]}`);
-
-  // 2. Using Object.entries() with map
-  // return Object.entries(obj).map(([key, value]) => `${key}: ${value}`);
-
-  // 3. Using for...in
-  // let res = [];
-
-  // for (let prop in obj) {
-  //   if (obj.hasOwnProperty(prop)) {
-  //     res.push(`${prop}: ${obj[prop]}`);
-  //   }
-  // }
-
-  // return res;
 }
 
 // ===== OBJECT COPYING & PROPERTY MANIPULATION =====
@@ -118,7 +110,7 @@ export function iterate(obj) {
  * copyProperties(target, source) // {a: 1, b: 2, c: 3}
  */
 export function copyProperties(target, source) {
-  // TODO: Copy properties from source to target
+  return Object.assign(target, source);
 }
 
 /**
@@ -130,7 +122,7 @@ export function copyProperties(target, source) {
  * original.name // still 'Alice'
  */
 export function shallowCopy(obj) {
-  // TODO: Create shallow copy of object
+  return Object.assign({}, obj);
 }
 
 // you should be able to freeze an object deeply (including nested objects)
@@ -158,7 +150,17 @@ export function deepFreeze(obj) {
  * person.getName() // 'Bob'
  */
 export function createPersonWithAccessors(initialName) {
-  // TODO: Create object with getter/setter methods
+  return {
+    name: initialName,
+
+    getName() {
+      return this.name;
+    },
+
+    setName(newName) {
+      this.name = newName;
+    }
+  };
 }
 
 // you should be able to alter the context in which a method runs
@@ -213,17 +215,20 @@ export function createCounter() {
 //   const logged = createLoggingProxy(obj);
 //   logged.name; // logs "Accessed property: name"
 export function createLoggingProxy(obj) {
-  return new Proxy(obj, {
-    get(target, prop) {
+  const handler = {
+    get(obj, prop) {
       console.log(`Accessed property: ${prop}`);
-      return target[prop];
+      return obj[prop];
     },
-    set(target, prop, value) {
+
+    set(obj, prop, value) {
       console.log(`Set property: ${prop} = ${value}`);
-      target[prop] = value;
+      obj[prop] = value;
       return true;
     }
-  });
+  };
+
+  return new Proxy(obj, handler);
 }
 
 // you should be able to create a factory function with private methods

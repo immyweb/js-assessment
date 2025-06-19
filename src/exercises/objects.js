@@ -21,9 +21,7 @@
  * createObject('name', 'Alice', 'age', 25) // {name: 'Alice', age: 25}
  * createObject('color', 'blue') // {color: 'blue'}
  */
-export function createObject(...args) {
-  // TODO: Create object from key-value pairs
-}
+export function createObject(...args) {}
 
 /**
  * Write a function that returns an array of all the keys in an object.
@@ -31,9 +29,7 @@ export function createObject(...args) {
  * getKeys({name: 'Alice', age: 25}) // ['name', 'age']
  * getKeys({}) // []
  */
-export function getKeys(obj) {
-  // TODO: Return array of object keys
-}
+export function getKeys(obj) {}
 
 /**
  * Write a function that returns an array of all the values in an object.
@@ -41,9 +37,7 @@ export function getKeys(obj) {
  * getValues({name: 'Alice', age: 25}) // ['Alice', 25]
  * getValues({}) // []
  */
-export function getValues(obj) {
-  // TODO: Return array of object values
-}
+export function getValues(obj) {}
 
 /**
  * Write a function that returns an array of key-value pairs from an object.
@@ -51,9 +45,7 @@ export function getValues(obj) {
  * getEntries({name: 'Alice', age: 25}) // [['name', 'Alice'], ['age', 25]]
  * getEntries({}) // []
  */
-export function getEntries(obj) {
-  // TODO: Return array of [key, value] pairs
-}
+export function getEntries(obj) {}
 
 /**
  * Write a function that checks if an object has a specific property.
@@ -61,9 +53,7 @@ export function getEntries(obj) {
  * hasProperty({name: 'Alice', age: 25}, 'name') // true
  * hasProperty({name: 'Alice'}, 'age') // false
  */
-export function hasProperty(obj, prop) {
-  // TODO: Check if object has property
-}
+export function hasProperty(obj, prop) {}
 
 /**
  * Write a function that counts the number of properties in an object.
@@ -71,9 +61,7 @@ export function hasProperty(obj, prop) {
  * countProperties({name: 'Alice', age: 25}) // 2
  * countProperties({}) // 0
  */
-export function countProperties(obj) {
-  // TODO: Count object properties
-}
+export function countProperties(obj) {}
 
 /**
  * Write a function that removes a property from an object and returns the modified object.
@@ -81,12 +69,10 @@ export function countProperties(obj) {
  * const obj = {name: 'Alice', age: 25, city: 'NYC'};
  * removeProperty(obj, 'age') // {name: 'Alice', city: 'NYC'}
  */
-export function removeProperty(obj, prop) {
-  // TODO: Remove property from object
-}
+export function removeProperty(obj, prop) {}
 
 // you should be able to iterate over an object's "own" properties
-// and return an array of properties.
+// and return an array of properties.3
 // Example:
 //   iterate(obj) === ["foo: bar", "baz: bim"]
 export function iterate(obj) {}
@@ -100,9 +86,7 @@ export function iterate(obj) {}
  * const source = {b: 2, c: 3};
  * copyProperties(target, source) // {a: 1, b: 2, c: 3}
  */
-export function copyProperties(target, source) {
-  // TODO: Copy properties from source to target
-}
+export function copyProperties(target, source) {}
 
 /**
  * Write a function that creates a shallow copy of an object.
@@ -112,9 +96,7 @@ export function copyProperties(target, source) {
  * copy.name = 'Bob';
  * original.name // still 'Alice'
  */
-export function shallowCopy(obj) {
-  // TODO: Create shallow copy of object
-}
+export function shallowCopy(obj) {}
 
 // you should be able to freeze an object deeply (including nested objects)
 // Example:
@@ -131,9 +113,7 @@ export function deepFreeze(obj) {}
  * person.setName('Bob');
  * person.getName() // 'Bob'
  */
-export function createPersonWithAccessors(initialName) {
-  // TODO: Create object with getter/setter methods
-}
+export function createPersonWithAccessors(initialName) {}
 
 // you should be able to alter the context in which a method runs
 // Example:
