@@ -39,14 +39,6 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - Performance optimization techniques
 - Profiling and measurement
 
-### Functional Programming Concepts
-
-- Immutability patterns
-- Pure functions vs side effects
-- Functional composition
-- Monads/functors (advanced)
-- Ramda/Lodash-style utility functions
-
 ### Regular Expressions
 
 - Pattern matching
