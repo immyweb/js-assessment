@@ -16,7 +16,20 @@ import {
   sumAll,
   createGreeting,
   createObjectWithMethods,
-  compareFunctionTypes
+  compareFunctionTypes,
+  updateUserImmutably,
+  calculateTax,
+  impureCounter,
+  callCount,
+  compose,
+  pipe,
+  Maybe,
+  map,
+  filter,
+  reduce,
+  processNumbers,
+  Box,
+  memoize
 } from '../exercises/functions';
 
 describe('Functions', () => {
@@ -377,6 +390,216 @@ describe('Functions', () => {
         ];
 
         expect(new Set(results).size).toBe(3); // All different results
+      });
+    });
+  });
+
+  // ===== ADVANCED FUNCTIONAL PROGRAMMING =====
+  describe('Advanced Functional Programming', () => {
+    describe('Immutability', () => {
+      test('updateUserImmutably should not mutate original object', () => {
+        const user = { name: 'Alice', age: 30, city: 'NYC' };
+        const updated = updateUserImmutably(user, { age: 31, city: 'LA' });
+
+        // Original should be unchanged
+        expect(user).toEqual({ name: 'Alice', age: 30, city: 'NYC' });
+
+        // New object should have updates
+        expect(updated).toEqual({ name: 'Alice', age: 31, city: 'LA' });
+
+        // Should be different objects
+        expect(updated).not.toBe(user);
+      });
+
+      test('updateUserImmutably should handle empty updates', () => {
+        const user = { name: 'Bob', age: 25 };
+        const updated = updateUserImmutably(user, {});
+
+        expect(updated).toEqual(user);
+        expect(updated).not.toBe(user);
+      });
+    });
+
+    describe('Pure vs Impure Functions', () => {
+      test('calculateTax should be pure (same input = same output)', () => {
+        expect(calculateTax(100, 0.08)).toBe(8);
+        expect(calculateTax(100, 0.08)).toBe(8);
+        expect(calculateTax(200, 0.1)).toBe(20);
+        expect(calculateTax(0, 0.5)).toBe(0);
+      });
+
+      test('impureCounter should have side effects', () => {
+        const initialCallCount = callCount;
+        const consoleSpy = vi
+          .spyOn(console, 'log')
+          .mockImplementation(() => {});
+
+        impureCounter();
+        expect(callCount).toBe(initialCallCount + 1);
+        expect(consoleSpy).toHaveBeenCalled();
+
+        impureCounter();
+        expect(callCount).toBe(initialCallCount + 2);
+
+        consoleSpy.mockRestore();
+      });
+    });
+
+    describe('Function Composition', () => {
+      test('compose should apply functions right to left', () => {
+        const add5 = (x) => x + 5;
+        const multiply2 = (x) => x * 2;
+        const composed = compose(multiply2, add5);
+
+        expect(composed(3)).toBe(16); // (3 + 5) * 2 = 16
+        expect(composed(0)).toBe(10); // (0 + 5) * 2 = 10
+      });
+
+      test('pipe should apply functions left to right', () => {
+        const add5 = (x) => x + 5;
+        const multiply2 = (x) => x * 2;
+        const subtract1 = (x) => x - 1;
+        const piped = pipe(add5, multiply2, subtract1);
+
+        expect(piped(3)).toBe(15); // ((3 + 5) * 2) - 1 = 15
+      });
+
+      test('pipe should handle single function', () => {
+        const double = (x) => x * 2;
+        const piped = pipe(double);
+
+        expect(piped(5)).toBe(10);
+      });
+    });
+
+    describe('Maybe Monad', () => {
+      test('Maybe should handle valid values', () => {
+        const maybe = Maybe('hello');
+        const result = maybe.map((s) => s.toUpperCase()).map((s) => s + '!');
+
+        expect(result.getValue()).toBe('HELLO!');
+      });
+
+      test('Maybe should safely handle null/undefined', () => {
+        const maybeNull = Maybe(null);
+        const result = maybeNull
+          .map((s) => s.toUpperCase())
+          .map((s) => s + '!');
+
+        expect(result.getValue()).toBe(null);
+      });
+
+      test('Maybe should chain operations safely', () => {
+        const maybeUndefined = Maybe(undefined);
+        const result = maybeUndefined
+          .map((x) => x.toString())
+          .map((s) => s.length)
+          .map((n) => n * 2);
+
+        expect(result.getValue()).toBe(undefined);
+      });
+    });
+
+    describe('Utility Functions', () => {
+      test('map should work with currying', () => {
+        const double = (x) => x * 2;
+
+        // Partially applied
+        const mapDouble = map(double);
+        expect(mapDouble([1, 2, 3])).toEqual([2, 4, 6]);
+
+        // Fully applied
+        expect(map(double, [1, 2, 3])).toEqual([2, 4, 6]);
+      });
+
+      test('filter should work with currying', () => {
+        const isEven = (x) => x % 2 === 0;
+
+        // Partially applied
+        const filterEvens = filter(isEven);
+        expect(filterEvens([1, 2, 3, 4, 5, 6])).toEqual([2, 4, 6]);
+
+        // Fully applied
+        expect(filter(isEven, [1, 2, 3, 4, 5, 6])).toEqual([2, 4, 6]);
+      });
+
+      test('reduce should work with currying', () => {
+        const sum = (a, b) => a + b;
+        const multiply = (a, b) => a * b;
+
+        // Partially applied
+        const sumAll = reduce(sum, 0);
+        expect(sumAll([1, 2, 3, 4])).toBe(10);
+
+        // Fully applied
+        expect(reduce(multiply, 1, [2, 3, 4])).toBe(24);
+      });
+
+      test('processNumbers should compose multiple operations', () => {
+        const numbers = [1, 2, 3, 4, 5, 6];
+        const result = processNumbers(numbers);
+
+        // Filter evens [2,4,6], double [4,8,12], sum = 24
+        expect(result).toBe(24);
+      });
+    });
+
+    describe('Functor (Box)', () => {
+      test('Box should allow chaining transformations', () => {
+        const box = Box(5);
+        const result = box.map((x) => x * 2).map((x) => x + 1);
+
+        expect(result.fold((x) => x)).toBe(11);
+      });
+
+      test('Box should maintain functor laws', () => {
+        const box = Box(10);
+        const f = (x) => x * 2;
+        const g = (x) => x + 3;
+
+        // Identity law
+        expect(box.map((x) => x).fold((x) => x)).toBe(box.fold((x) => x));
+
+        // Composition law
+        const composed = box.map((x) => f(g(x)));
+        const chained = box.map(g).map(f);
+        expect(composed.fold((x) => x)).toBe(chained.fold((x) => x));
+      });
+    });
+
+    describe('Memoization', () => {
+      test('memoize should cache function results', () => {
+        let callCount = 0;
+        const expensiveFn = memoize((n) => {
+          callCount++;
+          return n * n;
+        });
+
+        expect(expensiveFn(5)).toBe(25);
+        expect(callCount).toBe(1);
+
+        expect(expensiveFn(5)).toBe(25);
+        expect(callCount).toBe(1); // Should not increment
+
+        expect(expensiveFn(3)).toBe(9);
+        expect(callCount).toBe(2); // New argument, should increment
+      });
+
+      test('memoize should handle multiple arguments', () => {
+        let callCount = 0;
+        const add = memoize((a, b) => {
+          callCount++;
+          return a + b;
+        });
+
+        expect(add(2, 3)).toBe(5);
+        expect(callCount).toBe(1);
+
+        expect(add(2, 3)).toBe(5);
+        expect(callCount).toBe(1); // Cached
+
+        expect(add(3, 2)).toBe(5);
+        expect(callCount).toBe(2); // Different argument order
       });
     });
   });

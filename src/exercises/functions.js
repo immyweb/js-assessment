@@ -173,3 +173,160 @@ export function createObjectWithMethods() {
 export function compareFunctionTypes() {
   // TODO: Show different ways to create functions
 }
+
+// ===== ADVANCED FUNCTIONAL PROGRAMMING =====
+
+/**
+ * Demonstrate immutability by creating functions that return new objects
+ * instead of mutating existing ones.
+ *
+ * const user = { name: "Alice", age: 30 };
+ * const updated = updateUserImmutably(user, { age: 31 });
+ * // user should remain unchanged, updated should be a new object
+ */
+export function updateUserImmutably(obj, updates) {
+  // TODO: Return new object without mutating original
+}
+
+/**
+ * Create a pure function that calculates tax. Pure functions:
+ * - Always return the same output for the same input
+ * - Have no side effects (don't modify external state)
+ * - Don't depend on external mutable state
+ *
+ * calculateTax(100, 0.08); // 8
+ * calculateTax(100, 0.08); // Always returns 8
+ */
+export function calculateTax(amount, rate) {
+  // TODO: Implement pure function
+}
+
+/**
+ * Create an impure function that demonstrates side effects by
+ * logging to console and modifying external state.
+ *
+ * let callCount = 0;
+ * impureCounter(); // logs and increments callCount
+ */
+let callCount = 0;
+export function impureCounter() {
+  // TODO: Demonstrate side effects
+}
+
+/**
+ * Implement function composition - combining simple functions
+ * to create more complex operations.
+ *
+ * const add5 = x => x + 5;
+ * const multiply2 = x => x * 2;
+ * const composed = compose(multiply2, add5);
+ * composed(3); // multiply2(add5(3)) = multiply2(8) = 16
+ */
+export function compose(f, g) {
+  // TODO: Return a function that applies g then f
+}
+
+/**
+ * Create a pipe function that applies functions left to right
+ * (opposite of compose).
+ *
+ * const add5 = x => x + 5;
+ * const multiply2 = x => x * 2;
+ * const piped = pipe(add5, multiply2);
+ * piped(3); // multiply2(add5(3)) = multiply2(8) = 16
+ */
+export function pipe(...functions) {
+  // TODO: Apply functions left to right
+}
+
+/**
+ * Implement a simple Maybe monad to handle null/undefined values safely.
+ * A Maybe wraps a value and provides safe operations on it.
+ *
+ * const value = Maybe.of("hello");
+ * const result = value.map(s => s.toUpperCase()).map(s => s + "!");
+ * result.getValue(); // "HELLO!"
+ *
+ * const nullValue = Maybe.of(null);
+ * const nullResult = nullValue.map(s => s.toUpperCase());
+ * nullResult.getValue(); // null (no error thrown)
+ */
+export function Maybe(value) {
+  // TODO: Implement Maybe monad
+}
+
+/**
+ * Create utility functions similar to Ramda/Lodash style.
+ * Implement a curried map function that can be partially applied.
+ *
+ * const double = x => x * 2;
+ * const mapDouble = map(double);
+ * mapDouble([1, 2, 3]); // [2, 4, 6]
+ *
+ * // Or use directly:
+ * map(double, [1, 2, 3]); // [2, 4, 6]
+ */
+export function map(fn, array) {
+  // TODO: Implement curried map function
+}
+
+/**
+ * Implement a curried filter function.
+ *
+ * const isEven = x => x % 2 === 0;
+ * const filterEvens = filter(isEven);
+ * filterEvens([1, 2, 3, 4]); // [2, 4]
+ */
+export function filter(predicate, array) {
+  // TODO: Implement curried filter function
+}
+
+/**
+ * Implement a curried reduce function.
+ *
+ * const sum = (a, b) => a + b;
+ * const sumAll = reduce(sum, 0);
+ * sumAll([1, 2, 3, 4]); // 10
+ */
+export function reduce(fn, initial, array) {
+  // TODO: Implement curried reduce function
+}
+
+/**
+ * Create a function that demonstrates function composition with
+ * multiple utility functions working together.
+ *
+ * const data = [1, 2, 3, 4, 5, 6];
+ * const result = processNumbers(data);
+ * // Should filter evens, double them, then sum: [2,4,6] -> [4,8,12] -> 24
+ */
+export function processNumbers(numbers) {
+  // TODO: Use compose/pipe with map/filter/reduce
+}
+
+/**
+ * Implement a simple functor (a container that can be mapped over).
+ * A Box wraps a value and allows transformations via map.
+ *
+ * const box = Box(5);
+ * const result = box.map(x => x * 2).map(x => x + 1);
+ * result.fold(x => x); // 11
+ */
+export function Box(value) {
+  // TODO: Implement Box functor
+}
+
+/**
+ * Create a memoization function that caches results of expensive
+ * function calls (demonstrates functional programming optimization).
+ *
+ * const expensiveFn = memoize((n) => {
+ *   // Simulate expensive calculation
+ *   return n * n;
+ * });
+ * expensiveFn(5); // Calculates and caches
+ * expensiveFn(5); // Returns cached result
+ */
+export function memoize(fn) {
+  // TODO: Implement memoization
+}
