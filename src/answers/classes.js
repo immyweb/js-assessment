@@ -14,7 +14,14 @@
  * person.greet() // "Hello, I'm Alice and I'm 25 years old"
  */
 export class Person {
-  // TODO: Implement Person class
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet() {
+    return `Hello, I'm ${this.name} and I'm ${this.age} years old`;
+  }
 }
 
 /**
@@ -27,7 +34,18 @@ export class Person {
  * student.study() // "Bob is studying"
  */
 export class Student extends Person {
-  // TODO: Implement Student class
+  constructor(name, age, grade) {
+    super(name, age);
+    this.grade = grade;
+  }
+
+  greet() {
+    return `Hello, I'm ${this.name} and I'm ${this.age} years old. My grade is ${this.grade}`;
+  }
+
+  study() {
+    return `${this.name} is studying`;
+  }
 }
 
 /**
@@ -42,15 +60,34 @@ export class Student extends Person {
  * audiobook.play() // "Playing Dune narrated by Scott Brick"
  */
 export class Media {
-  // TODO: Implement Media class
+  constructor(title, duration) {
+    this.title = title;
+    this.duration = duration;
+  }
+
+  play() {}
 }
 
 export class Book extends Media {
-  // TODO: Implement Book class
+  constructor(title, duration, pages) {
+    super(title, duration);
+    this.pages = pages;
+  }
+
+  play() {
+    return `Reading ${this.title}`;
+  }
 }
 
 export class AudioBook extends Media {
-  // TODO: Implement AudioBook class
+  constructor(title, duration, narrator) {
+    super(title, duration);
+    this.narrator = narrator;
+  }
+
+  play() {
+    return `Playing ${this.title} narrated by ${this.narrator}`;
+  }
 }
 
 /**
@@ -65,7 +102,36 @@ export class AudioBook extends Media {
  * calc.getValue() // 0
  */
 export class Calculator {
-  // TODO: Implement Calculator class with private field and method chaining
+  _currentValue = 0;
+
+  add(num) {
+    this._currentValue += num;
+    return this;
+  }
+
+  subtract(num) {
+    this._currentValue -= num;
+    return this;
+  }
+
+  multiply(num) {
+    this._currentValue *= num;
+    return this;
+  }
+
+  divide(num) {
+    this._currentValue /= num;
+    return this;
+  }
+
+  getValue() {
+    return this._currentValue;
+  }
+
+  reset() {
+    this._currentValue = 0;
+    return this;
+  }
 }
 
 /**
@@ -76,10 +142,14 @@ export class Calculator {
  * dog.speak() // "Rex makes a sound"
  */
 export function Animal(name, species) {
-  // TODO: Implement constructor function
+  this.name = name;
+  this.species = species;
 }
 
 // TODO: Add speak method to Animal prototype
+Animal.prototype.speak = function () {
+  return `${this.name} makes a sound`;
+};
 
 /**
  * Create a Dog constructor that inherits from Animal using prototype chain.
@@ -91,10 +161,14 @@ export function Animal(name, species) {
  * dog instanceof Dog // true
  */
 export function Dog(name) {
-  // TODO: Implement Dog constructor with inheritance
+  Animal.call(this, name);
 }
 
 // TODO: Set up prototype inheritance for Dog
+Object.setPrototypeOf(Dog.prototype, Animal.prototype);
+Dog.prototype.speak = function () {
+  return `${this.name} barks`;
+};
 
 /**
  * Create a Logger class that demonstrates static methods and properties.
@@ -107,7 +181,26 @@ export function Dog(name) {
  * Logger.getLogCount() // 2
  */
 export class Logger {
-  // TODO: Implement Logger class with static methods and properties
+  static count = 0;
+
+  static log(message) {
+    this.count++;
+    return message;
+  }
+
+  static warn(message) {
+    this.count++;
+    return message;
+  }
+
+  static error(message) {
+    this.count++;
+    return message;
+  }
+
+  static getLogCount() {
+    return this.count;
+  }
 }
 
 /**
@@ -123,7 +216,29 @@ export class Logger {
  * task1.completed // true
  */
 export class Task {
-  // TODO: Implement Task class with static ID generation
+  static currentId = 0;
+
+  constructor(title) {
+    this.title = title;
+    this.completed = false;
+    this.id = Task.getNextId();
+  }
+
+  static getNextId() {
+    return ++this.currentId;
+  }
+
+  complete() {
+    this.completed = true;
+  }
+
+  incomplete() {
+    this.completed = false;
+  }
+
+  toggle() {
+    this.completed = !this.completed;
+  }
 }
 
 /**
@@ -136,15 +251,32 @@ export class Task {
  * circle.area() // Math.PI * 9
  */
 export class Shape {
-  // TODO: Implement abstract Shape class
+  area() {
+    throw new Error('');
+  }
 }
 
 export class Rectangle extends Shape {
-  // TODO: Implement Rectangle class
+  constructor(width, height) {
+    super();
+    this.width = width;
+    this.height = height;
+  }
+
+  area() {
+    return this.width * this.height;
+  }
 }
 
 export class Circle extends Shape {
-  // TODO: Implement Circle class
+  constructor(radius) {
+    super();
+    this.radius = radius;
+  }
+
+  area() {
+    return Math.PI * this.radius * this.radius;
+  }
 }
 
 /**
@@ -160,7 +292,50 @@ export class Circle extends Shape {
  * user.validate() // true
  */
 export function addValidation(BaseClass) {
-  // TODO: Implement mixin that adds validation capabilities
+  return class extends BaseClass {
+    constructor(...args) {
+      super(...args);
+      this.rules = [];
+    }
+
+    addRule(rule) {
+      this.rules.push(rule);
+    }
+
+    validate() {
+      return this.rules.every((rule) => rule(this));
+    }
+  };
+}
+
+/**
+ * Create a mixin function that adds logging capabilities to any class.
+ * The mixin should add log() and getLogs() methods to instances.
+ *
+ * class TestClass {
+ *   constructor(name) { this.name = name; }
+ * }
+ * const LoggableClass = addLogging(TestClass);
+ * const instance = new LoggableClass('test');
+ * instance.log('Hello');
+ * instance.log('World');
+ * instance.getLogs() // ['Hello', 'World']
+ */
+export function addLogging(BaseClass) {
+  return class extends BaseClass {
+    constructor(...args) {
+      super(...args);
+      this.logs = [];
+    }
+
+    log(message) {
+      this.logs.push(message);
+    }
+
+    getLogs() {
+      return this.logs;
+    }
+  };
 }
 
 /**
@@ -175,7 +350,26 @@ export function addValidation(BaseClass) {
  * obj.arrowMethod() // "Alice" (lexically bound)
  */
 export function createContextDemo(name) {
-  // TODO: Create object demonstrating this context with different binding methods
+  const obj = {
+    name,
+
+    regularMethod() {
+      return this && this.name;
+    },
+
+    boundMethod: function () {
+      return this.name;
+    },
+
+    arrowMethod: () => {
+      return obj.name;
+    }
+  };
+
+  // Bind the boundMethod to ensure it always has the correct context
+  obj.boundMethod = obj.boundMethod.bind(obj);
+
+  return obj;
 }
 
 /**
@@ -187,8 +381,18 @@ export function createContextDemo(name) {
  * person1.greet() // "Hello, I'm Alice"
  * person1.__proto__ === person2.__proto__ // true (shared prototype)
  */
+const personPrototype = {
+  greet() {
+    return `Hello, I'm ${this.name}`;
+  }
+};
+
 export function createPersonWithPrototype(name, age) {
-  // TODO: Create factory with prototype chain
+  const person = Object.create(personPrototype);
+  person.name = name;
+  person.age = age;
+
+  return person;
 }
 
 /**
@@ -198,5 +402,21 @@ export function createPersonWithPrototype(name, age) {
  * getPrototypeChain(obj) // ['prop1', 'prop2', 'toString', 'valueOf', ...]
  */
 export function getPrototypeChain(obj) {
-  // TODO: Traverse prototype chain and collect property names
+  const properties = [];
+  let current = obj;
+
+  // Traverse the prototype chain until we reach null
+  while (current !== null) {
+    // Get all property names from current object/prototype
+    Object.getOwnPropertyNames(current).forEach((prop) => {
+      if (!properties.includes(prop)) {
+        properties.push(prop);
+      }
+    });
+
+    // Move up the prototype chain
+    current = Object.getPrototypeOf(current);
+  }
+
+  return properties;
 }

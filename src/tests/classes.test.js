@@ -9,9 +9,12 @@ import {
   Animal,
   Dog,
   Logger,
+  Task,
   Shape,
   Rectangle,
   Circle,
+  addValidation,
+  addLogging,
   createContextDemo,
   createPersonWithPrototype,
   getPrototypeChain
@@ -226,26 +229,33 @@ describe('Class and Prototype Exercises', () => {
     });
   });
 
-  describe('Counter class', () => {
-    beforeEach(() => {
-      // Reset static count if possible
-      if (Counter.reset) {
-        Counter.reset();
-      }
+  describe('Task class', () => {
+    it('should create task with title and auto-generated ID', () => {
+      const task = new Task('Learn JavaScript');
+
+      expect(task.title).toBe('Learn JavaScript');
+      expect(typeof task.id).toBe('number');
+      expect(task.completed).toBe(false);
     });
 
-    it('should track total count statically', () => {
-      const counter1 = new Counter();
-      const counter2 = new Counter();
+    it('should generate incremental IDs', () => {
+      const task1 = new Task('Task 1');
+      const task2 = new Task('Task 2');
 
-      expect(Counter.getTotalCount()).toBeGreaterThanOrEqual(2);
+      expect(task2.id).toBe(task1.id + 1);
     });
 
-    it('should have instance count', () => {
-      const counter = new Counter();
+    it('should have completion methods', () => {
+      const task = new Task('Learn JavaScript');
 
-      expect(typeof counter.getCount()).toBe('number');
-      expect(counter.getCount()).toBeGreaterThan(0);
+      task.complete();
+      expect(task.completed).toBe(true);
+
+      task.incomplete();
+      expect(task.completed).toBe(false);
+
+      task.toggle();
+      expect(task.completed).toBe(true);
     });
   });
 
@@ -268,6 +278,48 @@ describe('Class and Prototype Exercises', () => {
 
       expect(circle.area()).toBeCloseTo(Math.PI * 9, 5);
       expect(circle instanceof Shape).toBe(true);
+    });
+  });
+
+  describe('addValidation mixin', () => {
+    it('should add validation methods to class', () => {
+      class TestClass {}
+      const ValidatedClass = addValidation(TestClass);
+      const instance = new ValidatedClass();
+
+      expect(typeof instance.validate).toBe('function');
+      expect(typeof instance.addRule).toBe('function');
+    });
+
+    it('should validate using rules', () => {
+      class User {}
+      const ValidatedUser = addValidation(User);
+      const user = new ValidatedUser();
+
+      user.addRule((obj) => obj.name && obj.name.length > 0);
+
+      expect(user.validate()).toBe(false);
+      user.name = 'John';
+      expect(user.validate()).toBe(true);
+    });
+
+    it('should require all rules to pass', () => {
+      class TestClass {}
+      const ValidatedClass = addValidation(TestClass);
+      const instance = new ValidatedClass();
+
+      instance.addRule(() => true);
+      instance.addRule(() => false);
+
+      expect(instance.validate()).toBe(false);
+    });
+
+    it('should pass with no rules', () => {
+      class TestClass {}
+      const ValidatedClass = addValidation(TestClass);
+      const instance = new ValidatedClass();
+
+      expect(instance.validate()).toBe(true);
     });
   });
 
@@ -328,6 +380,7 @@ describe('Class and Prototype Exercises', () => {
 
       expect(typeof obj.regularMethod).toBe('function');
       expect(typeof obj.boundMethod).toBe('function');
+      expect(typeof obj.arrowMethod).toBe('function');
     });
 
     it('should demonstrate context binding', () => {
@@ -347,6 +400,17 @@ describe('Class and Prototype Exercises', () => {
 
       // Should return undefined when context is lost
       expect(detachedRegular()).toBeUndefined();
+    });
+
+    it('should demonstrate arrow method lexical binding', () => {
+      const obj = createContextDemo('Alice');
+      
+      // Arrow method should work when called on object
+      expect(obj.arrowMethod()).toBe('Alice');
+      
+      // Arrow method should work even when detached (lexically bound)
+      const detachedArrow = obj.arrowMethod;
+      expect(detachedArrow()).toBe('Alice');
     });
   });
 
