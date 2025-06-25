@@ -22,7 +22,7 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - Generators: Generator functions, iterators, custom iteration protocols
 - Browser APIs: DOM manipulation, event handling, storage APIs
 - Timers: setTimeout, setInterval, debouncing, throttling
-- Flow Control: Basic conditional logic (though limited)
+- Flow Control: Conditional logic, loop control, basic error handling, state machines and control flow patterns
 
 ✅ Algorithm Fundamentals
 
