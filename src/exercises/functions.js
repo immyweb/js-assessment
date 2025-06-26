@@ -93,8 +93,18 @@ export function demonstrateHoisting() {
 //   functionFunction("Hi")("there") === "Hi, there"
 export function functionFunction(str) {}
 
-// you should be able to use closures
-// TODO: Write instructions / example
+/**
+ * Write a function that creates an array of functions using closures.
+ * Each function should "remember" its corresponding value from the input array
+ * and apply the given function to that value when called.
+ *
+ * const arr = [1, 2, 3];
+ * const double = x => x * 2;
+ * const closures = makeClosures(arr, double);
+ * closures[0](); // 2 (double(1))
+ * closures[1](); // 4 (double(2))
+ * closures[2](); // 6 (double(3))
+ */
 export function makeClosures(arr, fn) {}
 
 /**
@@ -208,7 +218,7 @@ export function calculateTax(amount, rate) {
  * let callCount = 0;
  * impureCounter(); // logs and increments callCount
  */
-let callCount = 0;
+export let callCount = 0;
 export function impureCounter() {
   // TODO: Demonstrate side effects
 }

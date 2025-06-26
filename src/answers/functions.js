@@ -28,17 +28,13 @@ export function argsAsArray(fn, arr) {
 //   useArguments(1, 2) === 3
 //   useArguments(1, 2, 3) === 6
 export function useArguments(...args) {
-  const sum = args.reduce((a, b) => {
-    return a + b;
-  });
-
-  return sum;
+  return args.reduce((x, y) => x + y);
 }
 
 // you should be able to apply functions with
 // arbitrary numbers of arguments
 export function callIt(fn, ...args) {
-  fn.apply(null, args);
+  return fn.apply(null, args);
 }
 
 /**
@@ -50,7 +46,9 @@ export function callIt(fn, ...args) {
  * sumAll(); // 0
  */
 export function sumAll(...args) {
-  // TODO: Use rest parameters
+  if (!args.length) return 0;
+
+  return args.reduce((x, y) => x + y);
 }
 
 /**
@@ -62,7 +60,7 @@ export function sumAll(...args) {
  * createGreeting("Hey"); // "Hey, World!"
  */
 export function createGreeting(greeting = 'Hello', name = 'World') {
-  // TODO: Use default parameters
+  return `${greeting}, ${name}!`;
 }
 
 // ===== FUNCTION CONTEXT & SCOPE =====
@@ -85,7 +83,14 @@ export function speak(fn, obj) {
  * example.arrowMethod(); // 'this' refers to lexical scope
  */
 export function createThisExample() {
-  // TODO: Create object with regular and arrow function methods
+  return {
+    regularMethod: function () {
+      return this;
+    },
+    arrowMethod: () => {
+      return this;
+    }
+  };
 }
 
 /**
@@ -95,7 +100,11 @@ export function createThisExample() {
  * demonstrateHoisting(); // returns "Hoisting works!"
  */
 export function demonstrateHoisting() {
-  // TODO: Call a function that's declared later in the same scope
+  return hoisted();
+
+  function hoisted() {
+    return 'Hoisting works!';
+  }
 }
 
 // ===== HIGHER-ORDER FUNCTIONS & CLOSURES =====
@@ -104,12 +113,23 @@ export function demonstrateHoisting() {
 // Example:
 //   functionFunction("Hi")("there") === "Hi, there"
 export function functionFunction(str) {
-  return (arg) => {
-    return `${str}, ${arg}`;
+  return (str2) => {
+    return `${str}, ${str2}`;
   };
 }
 
-// you should be able to use closures
+/**
+ * Write a function that creates an array of functions using closures.
+ * Each function should "remember" its corresponding value from the input array
+ * and apply the given function to that value when called.
+ *
+ * const arr = [1, 2, 3];
+ * const double = x => x * 2;
+ * const closures = makeClosures(arr, double);
+ * closures[0](); // 2 (double(1))
+ * closures[1](); // 4 (double(2))
+ * closures[2](); // 6 (double(3))
+ */
 export function makeClosures(arr, fn) {
   let ret = [];
 
@@ -136,7 +156,15 @@ export function makeClosures(arr, fn) {
  * counter(); // 3
  */
 export function createPrivateCounter() {
-  // TODO: Implement IIFE pattern that returns a counter function
+  const counter = (() => {
+    let count = 0;
+    return () => {
+      count++;
+      return count;
+    };
+  })();
+
+  return counter;
 }
 
 /**
@@ -149,7 +177,9 @@ export function createPrivateCounter() {
  * logged(5); // logs "Calling function" and returns 10
  */
 export function functionAsValue(fn) {
-  // TODO: Demonstrate functions as values
+  const varFunc = fn;
+
+  return varFunc;
 }
 
 // ===== PARTIAL APPLICATION & CURRYING =====
@@ -166,27 +196,26 @@ export function partial(fn, str1, str2) {
 
 // you should be able to create a "partial" function
 // for variable number of applied arguments.
-// fn function takes 3 numbers & performs a calculation
+// fn takes 3 numbers & performs a calculation
 // Example:
 //   partialUsingArguments(fn)(4, 2, 1)) === 2
 //   partialUsingArguments(fn, 4)(2, 1)) === 2
 //   partialUsingArguments(fn, 4, 2)(1)) === 2
-export function partialUsingArguments(fn, ...args) {
+export function partialUsingArguments(fn, ...args1) {
   return (...args2) => {
-    const mergedArgs = [...args, ...args2];
-    return fn.apply(null, mergedArgs);
+    return fn.apply(null, [...args1, ...args2]);
   };
 }
 
 // you should be able to curry existing functions
-// fn function takes 3 numbers & performs a calculation
+// fn takes 3 numbers & performs a calculation
 // Example:
 //   curryIt(fn)(4)(2)(1) === 2
 export function curryIt(fn) {
-  return (x) => {
-    return (y) => {
-      return (z) => {
-        return fn(x, y, z);
+  return (num1) => {
+    return (num2) => {
+      return (num3) => {
+        return fn(num1, num2, num3);
       };
     };
   };
@@ -203,7 +232,14 @@ export function curryIt(fn) {
  * obj.calculate(5, 3); // 8
  */
 export function createObjectWithMethods() {
-  // TODO: Use ES6 method shorthand
+  return {
+    sayHello() {
+      return 'Hello from method!';
+    },
+    calculate(num1, num2) {
+      return num1 + num2;
+    }
+  };
 }
 
 /**
@@ -217,7 +253,19 @@ export function createObjectWithMethods() {
  * types.constructor(); // "I'm from constructor"
  */
 export function compareFunctionTypes() {
-  // TODO: Show different ways to create functions
+  const expression = function () {
+    return "I'm an expression";
+  };
+
+  const constructor = new Function(`return "I'm from constructor"`);
+
+  return {
+    declaration: function () {
+      return "I'm a declaration";
+    },
+    expression,
+    constructor
+  };
 }
 
 // ===== ADVANCED FUNCTIONAL PROGRAMMING =====
@@ -231,7 +279,10 @@ export function compareFunctionTypes() {
  * // user should remain unchanged, updated should be a new object
  */
 export function updateUserImmutably(obj, updates) {
-  // TODO: Return new object without mutating original
+  return {
+    ...obj,
+    ...updates
+  };
 }
 
 /**
@@ -244,7 +295,7 @@ export function updateUserImmutably(obj, updates) {
  * calculateTax(100, 0.08); // Always returns 8
  */
 export function calculateTax(amount, rate) {
-  // TODO: Implement pure function
+  return amount * rate;
 }
 
 /**
@@ -254,9 +305,11 @@ export function calculateTax(amount, rate) {
  * let callCount = 0;
  * impureCounter(); // logs and increments callCount
  */
-let callCount = 0;
+export let callCount = 0;
 export function impureCounter() {
-  // TODO: Demonstrate side effects
+  callCount += 1;
+  console.log(callCount);
+  return callCount;
 }
 
 /**
@@ -269,7 +322,9 @@ export function impureCounter() {
  * composed(3); // multiply2(add5(3)) = multiply2(8) = 16
  */
 export function compose(f, g) {
-  // TODO: Return a function that applies g then f
+  return (num) => {
+    return f(g(num));
+  };
 }
 
 /**
@@ -282,7 +337,9 @@ export function compose(f, g) {
  * piped(3); // multiply2(add5(3)) = multiply2(8) = 16
  */
 export function pipe(...functions) {
-  // TODO: Apply functions left to right
+  return (num) => {
+    return functions.reduce((acc, f) => f(acc), num);
+  };
 }
 
 /**
@@ -298,7 +355,62 @@ export function pipe(...functions) {
  * nullResult.getValue(); // null (no error thrown)
  */
 export function Maybe(value) {
-  // TODO: Implement Maybe monad
+  // Base Maybe class
+  class MaybeBase {
+    static of(value) {
+      return value == null ? new Nothing(value) : new Just(value);
+    }
+  }
+
+  // Just represents a value that exists
+  class Just extends MaybeBase {
+    constructor(value) {
+      super();
+      this.value = value;
+    }
+
+    map(fn) {
+      try {
+        return Maybe.of(fn(this.value));
+      } catch (e) {
+        return new Nothing(null);
+      }
+    }
+
+    getValue() {
+      return this.value;
+    }
+
+    getOrElse(_) {
+      return this.value;
+    }
+  }
+
+  // Nothing represents the absence of a value
+  class Nothing extends MaybeBase {
+    constructor(value) {
+      super();
+      this.value = value;
+    }
+
+    map(_) {
+      return this; // do nothing
+    }
+
+    getValue() {
+      return this.value;
+    }
+
+    getOrElse(defaultValue) {
+      return defaultValue;
+    }
+  }
+
+  // Static factory method
+  Maybe.of = MaybeBase.of;
+
+  // Return the appropriate instance
+  return value == null ? new Nothing(value) : new Just(value);
 }
 
 /**
@@ -313,7 +425,12 @@ export function Maybe(value) {
  * map(double, [1, 2, 3]); // [2, 4, 6]
  */
 export function map(fn, array) {
-  // TODO: Implement curried map function
+  if (array !== undefined) {
+    return array.map(fn);
+  }
+  return (array2) => {
+    return array2.map(fn);
+  };
 }
 
 /**
@@ -324,7 +441,12 @@ export function map(fn, array) {
  * filterEvens([1, 2, 3, 4]); // [2, 4]
  */
 export function filter(predicate, array) {
-  // TODO: Implement curried filter function
+  if (array !== undefined) {
+    return array.filter(predicate);
+  }
+  return (array2) => {
+    return array2.filter(predicate);
+  };
 }
 
 /**
@@ -335,7 +457,12 @@ export function filter(predicate, array) {
  * sumAll([1, 2, 3, 4]); // 10
  */
 export function reduce(fn, initial, array) {
-  // TODO: Implement curried reduce function
+  if (array !== undefined) {
+    return array.reduce(fn, initial);
+  }
+  return (array2) => {
+    return array2.reduce(fn, initial);
+  };
 }
 
 /**
@@ -347,7 +474,10 @@ export function reduce(fn, initial, array) {
  * // Should filter evens, double them, then sum: [2,4,6] -> [4,8,12] -> 24
  */
 export function processNumbers(numbers) {
-  // TODO: Use compose/pipe with map/filter/reduce
+  return numbers
+    .filter((x) => x % 2 === 0)
+    .map((x) => x * 2)
+    .reduce((a, b) => a + b);
 }
 
 /**
@@ -359,7 +489,15 @@ export function processNumbers(numbers) {
  * result.fold(x => x); // 11
  */
 export function Box(value) {
-  // TODO: Implement Box functor
+  let val = value;
+  return {
+    map: (fn) => {
+      return Box(fn(val));
+    },
+    fold: (fn) => {
+      return fn(val);
+    }
+  };
 }
 
 /**
@@ -374,5 +512,17 @@ export function Box(value) {
  * expensiveFn(5); // Returns cached result
  */
 export function memoize(fn) {
-  // TODO: Implement memoization
+  const cache = {};
+
+  return (...args) => {
+    const key = JSON.stringify(args);
+
+    if (cache[key]) {
+      return cache[key];
+    }
+
+    const result = fn(...args);
+    cache[key] = result;
+    return result;
+  };
 }
