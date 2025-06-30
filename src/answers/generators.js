@@ -1,4 +1,16 @@
 /**
+ * For each of the following exercises, write a function that returns
+ * the correct result.
+ *
+ * These exercises focus on generators and iterators in JavaScript.
+ * You'll need to understand generator functions, yield expressions, iterator protocol,
+ * and how to create custom iterable objects.
+ *
+ * Generators are powerful for creating lazy sequences, managing state,
+ * and implementing custom iteration patterns.
+ */
+
+/**
  * Write a generator function that yields numbers from 1 to n.
  *
  * [...countTo(5)] // [1, 2, 3, 4, 5]
