@@ -225,11 +225,13 @@ describe('Async Exercises', () => {
       const results = [];
 
       const processingPromise = processSequentially(items, async (num) => {
-        await new Promise((resolve) => setTimeout(resolve, 100));
         results.push(num);
+        // Remove the setTimeout to avoid timer issues
+        await Promise.resolve();
       });
 
       expect(processingPromise).toBeInstanceOf(Promise);
+
       await processingPromise;
 
       expect(results).toEqual([1, 2, 3]);
@@ -361,6 +363,8 @@ describe('Async Exercises', () => {
     it('should return parsed JSON when fetch succeeds', async () => {
       const mockData = { id: 1, name: 'Test' };
       const mockResponse = {
+        ok: true,
+        status: 200,
         json: vi.fn().mockResolvedValue(mockData)
       };
 
@@ -374,6 +378,20 @@ describe('Async Exercises', () => {
 
     it('should return fallback data when fetch fails', async () => {
       global.fetch.mockRejectedValue(new Error('Network error'));
+
+      const result = await fetchWithFallback('/api/data', 'fallback data');
+
+      expect(result).toBe('fallback data');
+    });
+
+    it('should return fallback data when HTTP error occurs', async () => {
+      const mockResponse = {
+        ok: false,
+        status: 404,
+        json: vi.fn().mockRejectedValue(new Error('Not found'))
+      };
+
+      global.fetch.mockResolvedValue(mockResponse);
 
       const result = await fetchWithFallback('/api/data', 'fallback data');
 

@@ -14,7 +14,9 @@
  * // logs 'hello' after 1 second
  */
 export function createPromise(value, delay) {
-  // TODO: Create promise using new Promise()
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(value), delay);
+  });
 }
 
 /**
@@ -27,7 +29,7 @@ export function createPromise(value, delay) {
  *   .then(x => x * 3);    // 33
  */
 export function promiseChain(initialValue) {
-  // TODO: Create chainable promise
+  return Promise.resolve(initialValue);
 }
 
 /**
@@ -38,7 +40,7 @@ export function promiseChain(initialValue) {
  * // resolves to 'default'
  */
 export function handleRejection(promise, defaultValue) {
-  // TODO: Handle promise rejection
+  return promise.catch((error) => defaultValue);
 }
 
 /**
@@ -49,7 +51,7 @@ export function handleRejection(promise, defaultValue) {
  * // [result1, result2, result3]
  */
 export async function waitForAll(promises) {
-  // TODO: Use Promise.all
+  return Promise.all(promises).then((responses) => responses);
 }
 
 /**
@@ -60,7 +62,22 @@ export async function waitForAll(promises) {
  * // {fulfilled: [value1], rejected: [reason2]}
  */
 export async function waitForAllSettled(promises) {
-  // TODO: Use Promise.allSettled and categorize results
+  const result = {
+    fulfilled: [],
+    rejected: []
+  };
+
+  const responses = await Promise.allSettled(promises);
+
+  responses.forEach((response) => {
+    if (response.status === 'fulfilled') {
+      result.fulfilled.push(response.value);
+    } else if (response.status === 'rejected') {
+      result.rejected.push(response.reason);
+    }
+  });
+
+  return result;
 }
 
 /**
@@ -71,7 +88,7 @@ export async function waitForAllSettled(promises) {
  * // returns result of fastPromise
  */
 export async function racePromises(promises) {
-  // TODO: Use Promise.race
+  return await Promise.race(promises);
 }
 
 /**
@@ -83,7 +100,19 @@ export async function racePromises(promises) {
  * const result = await promisifiedFn(5); // 10
  */
 export function promisify(callbackFn) {
-  // TODO: Convert callback function to promise
+  return (...args) => {
+    return new Promise((resolve, reject) => {
+      function callback(err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      }
+      args.push(callback);
+      callbackFn.call(this, ...args);
+    });
+  };
 }
 
 /**
@@ -97,7 +126,9 @@ export function promisify(callbackFn) {
  * // logs 1, then 2, then 3 with 100ms between each
  */
 export async function processSequentially(items, asyncCallback) {
-  // TODO: Process items one by one
+  for (const item of items) {
+    await asyncCallback(item);
+  }
 }
 
 /**
@@ -108,7 +139,11 @@ export async function processSequentially(items, asyncCallback) {
  * // rejects with 'Timeout' if slowPromise takes longer than 5 seconds
  */
 export function withTimeout(promise, timeoutMs) {
-  // TODO: Race promise against timeout
+  const timeoutPromise = new Promise((resolve, reject) => {
+    setTimeout(() => reject(new Error('Timeout')), timeoutMs);
+  });
+
+  return Promise.race([promise, timeoutPromise]);
 }
 
 /**
@@ -121,7 +156,15 @@ export function withTimeout(promise, timeoutMs) {
  * }, 3);
  */
 export async function retryOperation(asyncFn, maxRetries) {
-  // TODO: Retry failed operations
+  try {
+    const result = await asyncFn();
+    return result;
+  } catch (error) {
+    if (maxRetries === 0) {
+      throw error;
+    }
+    return retryOperation(asyncFn, maxRetries - 1);
+  }
 }
 
 /**
@@ -131,7 +174,11 @@ export async function retryOperation(asyncFn, maxRetries) {
  * console.log('Done waiting');
  */
 export function delay(ms) {
-  // TODO: Create promise-based delay
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
 }
 
 /**
@@ -141,7 +188,18 @@ export function delay(ms) {
  * // returns API data or fallback if API fails
  */
 export async function fetchWithFallback(url, fallbackData) {
-  // TODO: Fetch with error handling and fallback
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    return fallbackData;
+  }
 }
 
 /**
@@ -154,7 +212,13 @@ export async function fetchWithFallback(url, fallbackData) {
  * const sum = await sumAsyncIterable(numbers()); // 6
  */
 export async function sumAsyncIterable(asyncIterable) {
-  // TODO: Use for await...of to sum values
+  let sum = 0;
+
+  for await (const num of asyncIterable) {
+    sum += num;
+  }
+
+  return sum;
 }
 
 /**
@@ -166,5 +230,30 @@ export async function sumAsyncIterable(asyncIterable) {
  * controller.abort(); // should reject the promise
  */
 export function createCancellablePromise(delay, abortSignal) {
-  // TODO: Create promise that respects abort signal
+  return new Promise((resolve, reject) => {
+    // Check if already aborted
+    if (abortSignal.aborted) {
+      reject(new Error('Operation aborted'));
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      resolve();
+    }, delay);
+
+    // Add abort listener
+    const abortHandler = () => {
+      clearTimeout(timer);
+      reject(new Error('Operation aborted'));
+    };
+
+    abortSignal.addEventListener('abort', abortHandler);
+
+    // Clean up the event listener when the promise resolves
+    const originalResolve = resolve;
+    resolve = () => {
+      abortSignal.removeEventListener('abort', abortHandler);
+      originalResolve();
+    };
+  });
 }
