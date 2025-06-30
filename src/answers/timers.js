@@ -14,7 +14,11 @@
  * delayedExecution(() => console.log('hello'), 1000);
  * // logs 'hello' after 1 second
  */
-function delayedExecution(callback, delay) {}
+export function delayedExecution(callback, delay) {
+  const timerId = setTimeout(callback, delay);
+
+  return timerId;
+}
 
 /**
  * Write a function that returns an object with start and cancel methods.
@@ -25,7 +29,22 @@ function delayedExecution(callback, delay) {}
  * timer.start(); // will log 'done' after 1 second
  * timer.cancel(); // prevents the callback from executing
  */
-function createCancellableTimer(callback, delay) {}
+export function createCancellableTimer(callback, delay) {
+  return {
+    timerId: null,
+
+    start() {
+      this.timerId = setTimeout(callback, delay);
+    },
+
+    cancel() {
+      if (this.timerId !== null) {
+        clearTimeout(this.timerId);
+        this.timerId = null;
+      }
+    }
+  };
+}
 
 /**
  * Write a function that executes a callback repeatedly at specified intervals.
@@ -34,7 +53,11 @@ function createCancellableTimer(callback, delay) {}
  * repeatedExecution(() => console.log('tick'), 500);
  * // logs 'tick' every 500ms
  */
-function repeatedExecution(callback, interval) {}
+export function repeatedExecution(callback, interval) {
+  const intervalId = setInterval(callback, interval);
+
+  return intervalId;
+}
 
 /**
  * Write a function that returns a debounced version of the provided function.
@@ -45,7 +68,17 @@ function repeatedExecution(callback, interval) {}
  * debouncedLog(); debouncedLog(); debouncedLog();
  * // only logs 'called' once, 300ms after the last call
  */
-function debounce(func, delay) {}
+export function debounce(func, delay) {
+  let timer;
+
+  return function (...args) {
+    const context = this;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(context, args);
+    }, delay);
+  };
+}
 
 /**
  * Write a function that creates a countdown timer. It should call onTick
@@ -58,4 +91,49 @@ function debounce(func, delay) {}
  * );
  * countdown.pause(); countdown.resume(); countdown.stop();
  */
-function createCountdown(seconds, onTick, onComplete) {}
+export function createCountdown(seconds, onTick, onComplete) {
+  let timeLeft = seconds;
+  let timerRunning = false;
+  let timerId = null;
+
+  function createInterval() {
+    timerRunning = true;
+    timerId = setInterval(() => {
+      if (timeLeft > 0) {
+        timeLeft -= 1;
+        onTick(timeLeft);
+      }
+      if (timeLeft === 0) {
+        onComplete();
+        clearInterval(timerId);
+        timerRunning = false;
+      }
+    }, 1000);
+  }
+
+  createInterval();
+
+  return {
+    pause() {
+      if (timerRunning) {
+        clearInterval(timerId);
+        timerRunning = false;
+        timerId = null;
+      }
+    },
+
+    resume() {
+      if (timeLeft > 0 && !timerRunning) {
+        createInterval();
+      }
+    },
+
+    stop() {
+      if (timerRunning) {
+        clearInterval(timerId);
+        timerRunning = false;
+        timerId = null;
+      }
+    }
+  };
+}

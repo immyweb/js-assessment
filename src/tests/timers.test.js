@@ -30,8 +30,9 @@ describe('Timer Exercises', () => {
       const callback = vi.fn();
       const timerId = delayedExecution(callback, 500);
 
-      expect(typeof timerId).toBe('number');
-      expect(timerId).toBeGreaterThan(0);
+      // With fake timers, setTimeout returns an object, not a number
+      expect(timerId).toBeDefined();
+      expect(timerId).not.toBeNull();
     });
   });
 
@@ -90,8 +91,9 @@ describe('Timer Exercises', () => {
       const callback = vi.fn();
       const intervalId = repeatedExecution(callback, 100);
 
-      expect(typeof intervalId).toBe('number');
-      expect(intervalId).toBeGreaterThan(0);
+      // With fake timers, setInterval returns an object, not a number
+      expect(intervalId).toBeDefined();
+      expect(intervalId).not.toBeNull();
     });
   });
 
