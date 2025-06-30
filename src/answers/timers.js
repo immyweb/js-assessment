@@ -4,7 +4,6 @@
  *
  * Some of these exercises require you to work with timers and intervals.
  * You'll need to use setTimeout, setInterval, clearTimeout, and clearInterval.
- * Some exercises may require promises or async/await for proper testing.
  */
 
 /**
