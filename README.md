@@ -15,6 +15,7 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - Functions: Arguments, scope, closures, higher-order functions, currying, partial application
 - Classes: ES6 classes, inheritance, prototypes, method overriding
 - Async Programming: Promises, async/await, Promise.all/race/allSettled, promisification, sequential processing
+- Error Handling: try/catch, custom error types, async error handling, error recovery patterns
 
 ✅ Advanced Concepts
 
@@ -23,6 +24,7 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - Browser APIs: DOM manipulation, event handling, storage APIs
 - Timers: setTimeout, setInterval, debouncing, throttling
 - Flow Control: Conditional logic, loop control, basic error handling, state machines and control flow patterns
+- Web APIs: Fetch API, Service Workers, Web Workers, IndexedDB, WebSockets, File API
 
 ✅ Algorithm Fundamentals
 
@@ -50,15 +52,6 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - JSON parsing/stringification
 - Custom serialization logic
 - Data validation
-
-### Web APIs & Modern Browser Features
-
-- Fetch API
-- Service Workers
-- Web Workers
-- IndexedDB
-- WebSockets
-- File API
 
 ### TypeScript Integration (if applicable)
 
