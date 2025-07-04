@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 
 import {
   // Maps, Sets, WeakMap, and WeakSet
@@ -12,8 +12,8 @@ import {
   createMultiValueMap,
   createObservableSet,
   // Collection Transformations
-  mapToJSON,
-  jsonToMap,
+  mapToArray,
+  arrayToMap,
   createFilteredSetView,
   deepCloneCollection,
   collectionMap,
@@ -185,17 +185,17 @@ describe('ES6 Collections: Maps, Sets, WeakMap, and WeakSet', () => {
   });
 
   describe('Collection Transformations', () => {
-    describe('mapToJSON and jsonToMap', () => {
-      test('should convert between Map and JSON format', () => {
+    describe('mapToArray and arrayToMap', () => {
+      test('should convert between Map and array format', () => {
         const map = new Map([
           ['key', 'value'],
           ['number', 42]
         ]);
-        const json = mapToJSON(map);
+        const arr = mapToArray(map);
 
-        expect(Array.isArray(json)).toBe(true);
+        expect(Array.isArray(arr)).toBe(true);
 
-        const recreatedMap = jsonToMap(json);
+        const recreatedMap = arrayToMap(arr);
         expect(recreatedMap instanceof Map).toBe(true);
         expect(recreatedMap.get('key')).toBe('value');
         expect(recreatedMap.get('number')).toBe(42);

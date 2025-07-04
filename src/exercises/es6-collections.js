@@ -95,14 +95,14 @@ export function createObservableSet(initialValues = [], observers = {}) {}
 // ===== COLLECTION TRANSFORMATIONS =====
 
 /**
- * Write a function that transforms a Map to/from a specific format.
- * Convert between Map and JSON compatible format.
+ * Write a function that transforms a Map to/from an array format.
+ * Convert between Map and array representation.
  *
- * mapToJSON(new Map([['key', 'value']])) // [['key', 'value']]
- * jsonToMap([['key', 'value']]) // Map { 'key' => 'value' }
+ * mapToArray(new Map([['key', 'value']])) // [['key', 'value']]
+ * arrayToMap([['key', 'value']]) // Map { 'key' => 'value' }
  */
-export function mapToJSON(map) {}
-export function jsonToMap(jsonArray) {}
+export function mapToArray(map) {}
+export function arrayToMap(entriesArray) {}
 
 /**
  * Write a function that creates a filtered view of a collection.
