@@ -80,6 +80,8 @@ beforeEach(() => {
   global.window = window;
   global.Event = window.Event;
   global.CustomEvent = window.CustomEvent;
+  global.KeyboardEvent = window.KeyboardEvent;
+  global.StorageEvent = window.StorageEvent;
 
   // Mock localStorage and sessionStorage
   const localStorageMock = createStorageMock();
@@ -87,8 +89,19 @@ beforeEach(() => {
 
   global.localStorage = localStorageMock;
   global.sessionStorage = sessionStorageMock;
-  window.localStorage = localStorageMock;
-  window.sessionStorage = sessionStorageMock;
+
+  // Use Object.defineProperty for window storage properties (JSDOM compatibility)
+  Object.defineProperty(window, 'localStorage', {
+    value: localStorageMock,
+    writable: true,
+    configurable: true
+  });
+
+  Object.defineProperty(window, 'sessionStorage', {
+    value: sessionStorageMock,
+    writable: true,
+    configurable: true
+  });
 });
 
 afterEach(() => {
@@ -413,7 +426,7 @@ describe('Browser APIs - DOM Manipulation', () => {
     element.style.color = 'red';
 
     const result = getComputedStyleValue(element, 'color');
-    expect(result).toBe('red');
+    expect(result).toBe('rgb(255, 0, 0)');
   });
 
   test('setStyle should set inline style', () => {
