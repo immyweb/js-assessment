@@ -1,5 +1,5 @@
 // ====================================================================
-// CATEGORY 1: DIGIT MANIPULATION & ANALYSIS
+// DIGIT MANIPULATION & ANALYSIS
 // ====================================================================
 // These exercises focus on working with individual digits within numbers.
 // You'll learn how to extract, analyze, and manipulate digits.
@@ -82,7 +82,7 @@ export function multiplyDigits(n) {}
 export function allPrimeDigits(n) {}
 
 // ====================================================================
-// CATEGORY 2: NUMBER VALIDATION & TYPE CHECKING
+// NUMBER VALIDATION & TYPE CHECKING
 // ====================================================================
 // These exercises help you understand JavaScript's number types and validate
 // numbers for different use cases and edge conditions.
@@ -103,7 +103,7 @@ export function isValidNumber(value) {}
 // Check if a number is within JavaScript's safe integer range
 // Examples:
 //   isSafeInteger(123) === true
-//   isSafeInteger(9007199254740991) === true  // Number.MAX_SAFE_INTEGER
+//   isSafeInteger(9007199254740991) === true
 //   isSafeInteger(9007199254740992) === false
 //   isSafeInteger(3.14) === false
 //   isSafeInteger(-9007199254740991) === true
@@ -124,7 +124,7 @@ export function isSafeInteger(num) {}
 export function isPowerOfTwo(n) {}
 
 // ====================================================================
-// CATEGORY 3: NUMBER PARSING & CONVERSION
+// NUMBER PARSING & CONVERSION
 // ====================================================================
 // These exercises teach you how to convert between different number formats
 // and parse numbers from various string representations.
@@ -165,7 +165,7 @@ export function convertToBase(num, base) {}
 export function convertTemperature(temp, mode) {}
 
 // ====================================================================
-// CATEGORY 4: MATHEMATICAL OPERATIONS & CALCULATIONS
+// MATHEMATICAL OPERATIONS & CALCULATIONS
 // ====================================================================
 // These exercises cover fundamental mathematical operations and algorithms
 // commonly used in programming and real-world applications.
@@ -214,7 +214,7 @@ export function average(numbers) {}
 export function compoundInterest(principal, rate, compoundsPerYear, years) {}
 
 // ====================================================================
-// CATEGORY 5: NUMBER FORMATTING & PRECISION
+// NUMBER FORMATTING & PRECISION
 // ====================================================================
 // These exercises focus on controlling number precision, formatting,
 // and handling floating-point arithmetic issues.
@@ -254,7 +254,7 @@ export function roundNumber(num, mode) {}
 export function calculatePercentage(part, whole, decimals) {}
 
 // ====================================================================
-// CATEGORY 6: UTILITY FUNCTIONS & RANGE OPERATIONS
+// UTILITY FUNCTIONS & RANGE OPERATIONS
 // ====================================================================
 // These exercises cover utility functions for working with number ranges,
 // constraints, and random number generation.

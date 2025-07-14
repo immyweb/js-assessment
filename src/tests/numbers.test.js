@@ -95,7 +95,7 @@ describe('Numbers', () => {
   // CATEGORY 2: NUMBER VALIDATION & TYPE CHECKING
   // ====================================================================
 
-  describe('DNumber Validation & Type Checking', () => {
+  describe('Number Validation & Type Checking', () => {
     test('you should be able to validate if a value is a valid finite number', () => {
       expect(isValidNumber(42)).toBeTruthy();
       expect(isValidNumber(3.14)).toBeTruthy();
@@ -202,7 +202,7 @@ describe('Numbers', () => {
 
     test('you should be able to calculate compound interest', () => {
       expect(compoundInterest(1000, 0.05, 1, 1)).toBeCloseTo(1050, 2);
-      expect(compoundInterest(1000, 0.05, 12, 2)).toBeCloseTo(1104.89, 2);
+      expect(compoundInterest(1000, 0.05, 12, 2)).toBeCloseTo(1104.94, 2);
       expect(compoundInterest(1500, 0.043, 4, 6)).toBeCloseTo(1938.84, 2);
       expect(compoundInterest(5000, 0.08, 1, 10)).toBeCloseTo(10794.62, 2);
     });

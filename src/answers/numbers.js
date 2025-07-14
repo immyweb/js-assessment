@@ -1,5 +1,5 @@
 // ====================================================================
-// CATEGORY 1: DIGIT MANIPULATION & ANALYSIS
+// DIGIT MANIPULATION & ANALYSIS
 // ====================================================================
 // These exercises focus on working with individual digits within numbers.
 // You'll learn how to extract, analyze, and manipulate digits.
@@ -30,9 +30,9 @@ export function reverseInt(n) {
 //   isPalindrome(0) === true
 
 export function isPalindrome(n) {
-  if (n < 0) return false;
-  const str = n.toString();
-  return str === str.split('').reverse().join('');
+  const reversed = n.toString().split('').reverse().join('');
+
+  return parseInt(reversed) === n;
 }
 
 // SUM OF DIGITS
@@ -48,7 +48,8 @@ export function sumDigits(n) {
   return Math.abs(n)
     .toString()
     .split('')
-    .reduce((sum, digit) => sum + parseInt(digit), 0);
+    .map((num) => parseInt(num))
+    .reduce((acc, num) => acc + num);
 }
 
 // DIGIT COUNT
@@ -74,7 +75,20 @@ export function countDigits(n) {
 //   largestDigit(1000) === 1
 
 export function largestDigit(n) {
-  return Math.max(...Math.abs(n).toString().split('').map(Number));
+  let largest = 0;
+
+  const arr = Math.abs(n)
+    .toString()
+    .split('')
+    .map((num) => parseInt(num));
+
+  arr.forEach((num) => {
+    if (num > largest) {
+      largest = num;
+    }
+  });
+
+  return largest;
 }
 
 // MULTIPLY DIGITS
@@ -90,7 +104,8 @@ export function multiplyDigits(n) {
   return Math.abs(n)
     .toString()
     .split('')
-    .reduce((product, digit) => product * parseInt(digit), 1);
+    .map((num) => parseInt(num))
+    .reduce((acc, num) => acc * num);
 }
 
 // PRIME DIGITS
@@ -103,15 +118,17 @@ export function multiplyDigits(n) {
 //   allPrimeDigits(7) === true
 
 export function allPrimeDigits(n) {
-  const primeDigits = new Set(['2', '3', '5', '7']);
-  return Math.abs(n)
+  const primeDigits = new Set([2, 3, 5, 7]);
+
+  return n
     .toString()
     .split('')
+    .map((digit) => parseInt(digit))
     .every((digit) => primeDigits.has(digit));
 }
 
 // ====================================================================
-// CATEGORY 2: NUMBER VALIDATION & TYPE CHECKING
+// NUMBER VALIDATION & TYPE CHECKING
 // ====================================================================
 // These exercises help you understand JavaScript's number types and validate
 // numbers for different use cases and edge conditions.
@@ -126,18 +143,26 @@ export function allPrimeDigits(n) {
 //   isValidNumber("123") === false
 //   isValidNumber(null) === false
 
-export function isValidNumber(value) {}
+export function isValidNumber(value) {
+  return !isNaN(value) && Number.isFinite(value) && typeof value === 'number';
+}
 
 // SAFE INTEGER CHECK
 // Check if a number is within JavaScript's safe integer range
 // Examples:
 //   isSafeInteger(123) === true
-//   isSafeInteger(9007199254740991) === true  // Number.MAX_SAFE_INTEGER
+//   isSafeInteger(9007199254740991) === true
 //   isSafeInteger(9007199254740992) === false
 //   isSafeInteger(3.14) === false
 //   isSafeInteger(-9007199254740991) === true
 
-export function isSafeInteger(num) {}
+export function isSafeInteger(num) {
+  return (
+    Number.isInteger(num) &&
+    num <= Number.MAX_SAFE_INTEGER &&
+    num >= Number.MIN_SAFE_INTEGER
+  );
+}
 
 // POWER OF TWO CHECK
 // Check if a positive integer is a power of 2
@@ -150,10 +175,20 @@ export function isSafeInteger(num) {}
 //   isPowerOfTwo(0) === false
 //   isPowerOfTwo(-8) === false
 
-export function isPowerOfTwo(n) {}
+export function isPowerOfTwo(n) {
+  if (n <= 0) {
+    return false;
+  }
+
+  while (n > 1) {
+    if (n % 2 !== 0) return false;
+    n = Math.floor(n / 2);
+  }
+  return true;
+}
 
 // ====================================================================
-// CATEGORY 3: NUMBER PARSING & CONVERSION
+// NUMBER PARSING & CONVERSION
 // ====================================================================
 // These exercises teach you how to convert between different number formats
 // and parse numbers from various string representations.
@@ -170,7 +205,40 @@ export function isPowerOfTwo(n) {}
 //   parseNumber("0xFF") === 255  // hex
 //   parseNumber("0b1010") === 10  // binary
 
-export function parseNumber(str) {}
+export function parseNumber(str) {
+  let format;
+  const trimmed = str.trim();
+
+  // Check for invalid strings that start with letters (except special prefixes)
+  if (
+    trimmed.match(/^[a-z]/i) &&
+    !trimmed.startsWith('0x') &&
+    !trimmed.startsWith('0b')
+  ) {
+    return NaN;
+  }
+
+  // Determine the number format
+  if (trimmed.startsWith('0x')) {
+    format = 'hex';
+  } else if (trimmed.startsWith('0b')) {
+    format = 'binary';
+  } else if (trimmed.includes('.')) {
+    format = 'decimal';
+  }
+
+  // Parse based on the detected format
+  if (format === 'hex') {
+    return parseInt(trimmed.substring(2), 16);
+  } else if (format === 'binary') {
+    return parseInt(trimmed.substring(2), 2);
+  } else if (format === 'decimal') {
+    return parseFloat(trimmed);
+  } else {
+    // For plain integers or strings that start with numbers like "123abc"
+    return parseInt(trimmed);
+  }
+}
 
 // CONVERT TO DIFFERENT BASES
 // Convert a decimal number to specified base (2-36)
@@ -180,7 +248,11 @@ export function parseNumber(str) {}
 //   convertToBase(8, 8) === "10"       // octal
 //   convertToBase(35, 36) === "z"      // base 36
 
-export function convertToBase(num, base) {}
+export function convertToBase(num, base) {
+  if (base >= 2 && base <= 36) {
+    return Math.abs(num).toString(base);
+  }
+}
 
 // TEMPERATURE CONVERSION
 // Convert temperature between Celsius and Fahrenheit
@@ -191,10 +263,16 @@ export function convertToBase(num, base) {}
 //   convertTemperature(100, 'toF') === 212   // 100°C to °F
 //   convertTemperature(98.6, 'toC') === 37   // 98.6°F to °C
 
-export function convertTemperature(temp, mode) {}
+export function convertTemperature(temp, mode) {
+  if (mode === 'toF') {
+    return (temp * 9) / 5 + 32;
+  } else {
+    return ((temp - 32) * 5) / 9;
+  }
+}
 
 // ====================================================================
-// CATEGORY 4: MATHEMATICAL OPERATIONS & CALCULATIONS
+// MATHEMATICAL OPERATIONS & CALCULATIONS
 // ====================================================================
 // These exercises cover fundamental mathematical operations and algorithms
 // commonly used in programming and real-world applications.
@@ -208,7 +286,24 @@ export function convertTemperature(temp, mode) {}
 //   factorial(10) === 3628800
 //   factorial(-1) === undefined (invalid input)
 
-export function factorial(n) {}
+export function factorial(n) {
+  // Check for invalid inputs (negative numbers or decimals)
+  if (n < 0 || !Number.isInteger(n)) {
+    return undefined;
+  }
+
+  // Base case: 0! = 1
+  if (n === 0) {
+    return 1;
+  }
+
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+
+  return result;
+}
 
 // GREATEST COMMON DIVISOR
 // Find the greatest common divisor (GCD) of two integers
@@ -219,7 +314,24 @@ export function factorial(n) {}
 //   gcd(0, 5) === 5
 //   gcd(-12, 18) === 6
 
-export function gcd(a, b) {}
+export function gcd(a, b) {
+  // Convert negative numbers to positive
+  a = Math.abs(a);
+  b = Math.abs(b);
+
+  // Handle edge cases
+  if (a === 0) return b;
+  if (b === 0) return a;
+
+  // Euclidean algorithm
+  while (b !== 0) {
+    let temp = b;
+    b = a % b;
+    a = temp;
+  }
+
+  return a;
+}
 
 // AVERAGE OF ARRAY
 // Calculate the average (mean) of an array of numbers
@@ -231,7 +343,15 @@ export function gcd(a, b) {}
 //   average([]) === 0
 //   average([1.5, 2.5, 3.5]) === 2.5
 
-export function average(numbers) {}
+export function average(numbers) {
+  if (numbers.length === 0) {
+    return 0;
+  }
+
+  const result = numbers.reduce((acc, num) => acc + num) / numbers.length;
+
+  return result;
+}
 
 // COMPOUND INTEREST CALCULATOR
 // Calculate compound interest: A = P(1 + r/n)^(nt)
@@ -240,10 +360,16 @@ export function average(numbers) {}
 //   compoundInterest(1000, 0.05, 1, 1) === 1050    // $1000 at 5% for 1 year
 //   compoundInterest(1000, 0.05, 12, 2) === 1104.89 (approximately)
 
-export function compoundInterest(principal, rate, compoundsPerYear, years) {}
+export function compoundInterest(principal, rate, compoundsPerYear, years) {
+  const ratePerPeriod = rate / compoundsPerYear + 1;
+  const nt = compoundsPerYear * years;
+  const compoundFactor = Math.pow(ratePerPeriod, nt);
+
+  return Math.round(principal * compoundFactor * 100) / 100;
+}
 
 // ====================================================================
-// CATEGORY 5: NUMBER FORMATTING & PRECISION
+// NUMBER FORMATTING & PRECISION
 // ====================================================================
 // These exercises focus on controlling number precision, formatting,
 // and handling floating-point arithmetic issues.
@@ -256,7 +382,9 @@ export function compoundInterest(principal, rate, compoundsPerYear, years) {}
 //   fixPrecision(1.005, 2) === 1.01
 //   fixPrecision(123.456789, 3) === 123.457
 
-export function fixPrecision(num, decimals) {}
+export function fixPrecision(num, decimals) {
+  return +(Math.round(num + 'e+' + decimals) + 'e-' + decimals);
+}
 
 // ROUNDING OPERATIONS
 // Round a number using different rounding methods
@@ -269,7 +397,9 @@ export function fixPrecision(num, decimals) {}
 //   roundNumber(-4.7, 'floor') === -5
 //   roundNumber(-4.7, 'ceil') === -4
 
-export function roundNumber(num, mode) {}
+export function roundNumber(num, mode) {
+  return Math[mode](num);
+}
 
 // PERCENTAGE CALCULATION
 // Calculate what percentage the first number is of the second number
@@ -280,10 +410,14 @@ export function roundNumber(num, mode) {}
 //   calculatePercentage(5, 8, 1) === 62.5
 //   calculatePercentage(0, 100, 0) === 0
 
-export function calculatePercentage(part, whole, decimals) {}
+export function calculatePercentage(part, whole, decimals) {
+  const percentage = (part / whole) * 100;
+
+  return parseFloat(percentage.toFixed(decimals));
+}
 
 // ====================================================================
-// CATEGORY 6: UTILITY FUNCTIONS & RANGE OPERATIONS
+// UTILITY FUNCTIONS & RANGE OPERATIONS
 // ====================================================================
 // These exercises cover utility functions for working with number ranges,
 // constraints, and random number generation.
@@ -295,7 +429,9 @@ export function calculatePercentage(part, whole, decimals) {}
 //   randomBetween(10, 20) // returns integer from 10 to 20
 //   randomBetween(-5, 5) // returns integer from -5 to 5
 
-export function randomBetween(min, max) {}
+export function randomBetween(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 // CLAMP NUMBER
 // Restrict a number to be within a specified range
@@ -305,4 +441,6 @@ export function randomBetween(min, max) {}
 //   clampNumber(15, 1, 10) === 10
 //   clampNumber(3.7, 2.5, 4.2) === 3.7
 
-export function clampNumber(num, min, max) {}
+export function clampNumber(num, min, max) {
+  return Math.min(Math.max(num, min), max);
+}
