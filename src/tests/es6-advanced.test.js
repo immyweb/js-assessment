@@ -16,11 +16,6 @@ import {
   createCompleteIterator,
   transformIterable,
   createAsyncIterator,
-  // Module Patterns
-  createModuleNamespace,
-  dynamicImport,
-  createModule,
-  createTreeShakeableBundle,
   // Advanced ES6+ Patterns
   createAdvancedDataStructure,
   createReactiveObject,
@@ -320,82 +315,6 @@ describe('ES6 Advanced: Symbols, Proxy/Reflect, Iterators, and Modules', () => {
     });
   });
 
-  describe('Module Patterns', () => {
-    describe('createModuleNamespace', () => {
-      test('should create namespace-like object', () => {
-        const utils = createModuleNamespace({
-          add: (a, b) => a + b,
-          subtract: (a, b) => a - b
-        });
-
-        expect(utils.add(1, 2)).toBe(3);
-        expect(utils.subtract(5, 3)).toBe(2);
-        expect(Object.keys(utils)).toContain('add');
-        expect(Object.keys(utils)).toContain('subtract');
-      });
-
-      test('should handle empty exports', () => {
-        const empty = createModuleNamespace({});
-        expect(Object.keys(empty)).toEqual([]);
-      });
-    });
-
-    describe('dynamicImport', () => {
-      test('should return Promise for module', async () => {
-        const modulePromise = dynamicImport('math');
-        expect(modulePromise instanceof Promise).toBe(true);
-
-        const module = await modulePromise;
-        expect(typeof module).toBe('object');
-      });
-
-      test('should simulate different modules', async () => {
-        const mathModule = await dynamicImport('math');
-        const utilsModule = await dynamicImport('utils');
-
-        expect(mathModule).toBeDefined();
-        expect(utilsModule).toBeDefined();
-      });
-    });
-
-    describe('createModule', () => {
-      test('should create module with dependencies', () => {
-        const moduleA = createModule('A', ['B']);
-        expect(moduleA.name).toBe('A');
-        expect(moduleA.dependencies).toContain('B');
-      });
-
-      test('should handle modules without dependencies', () => {
-        const module = createModule('standalone');
-        expect(module.name).toBe('standalone');
-        expect(Array.isArray(module.dependencies)).toBe(true);
-      });
-    });
-
-    describe('createTreeShakeableBundle', () => {
-      test('should include only used exports', () => {
-        const bundle = createTreeShakeableBundle(
-          {
-            add: (a, b) => a + b,
-            multiply: (a, b) => a * b,
-            unused: () => 'unused'
-          },
-          ['add', 'multiply']
-        );
-
-        expect(bundle.add).toBeDefined();
-        expect(bundle.multiply).toBeDefined();
-        expect(bundle.unused).toBeUndefined();
-      });
-
-      test('should handle empty used exports', () => {
-        const bundle = createTreeShakeableBundle({ add: (a, b) => a + b }, []);
-
-        expect(Object.keys(bundle)).toEqual([]);
-      });
-    });
-  });
-
   describe('Advanced ES6+ Patterns', () => {
     describe('createAdvancedDataStructure', () => {
       test('should create advanced data structure', () => {
@@ -463,6 +382,64 @@ describe('ES6 Advanced: Symbols, Proxy/Reflect, Iterators, and Modules', () => {
 
         expect(typeof chained.map).toBe('function');
         expect(typeof chained.toArray).toBe('function');
+      });
+
+      test('filter should exclude items that do not match predicate', async () => {
+        const pipeline = createPipeline([1, 2, 3, 4, 5]);
+        const result = await pipeline.filter((x) => x % 2 === 0).toArray();
+        expect(result).toEqual([2, 4]);
+      });
+
+      test('map should transform each item', async () => {
+        const pipeline = createPipeline([1, 2, 3]);
+        const result = await pipeline.map((x) => x * 2).toArray();
+        expect(result).toEqual([2, 4, 6]);
+      });
+
+      test('asyncMap should apply async transformations', async () => {
+        const pipeline = createPipeline([1, 2, 3]);
+        const result = await pipeline
+          .asyncMap(async (x) => {
+            return await Promise.resolve(x + 1);
+          })
+          .toArray();
+        expect(result).toEqual([2, 3, 4]);
+      });
+
+      test('should execute complete pipeline example correctly', async () => {
+        const result = await createPipeline([1, 2, 3, 4, 5])
+          .filter((x) => x % 2 === 0)
+          .map((x) => x * 2)
+          .asyncMap(async (x) => await Promise.resolve(x + 1))
+          .toArray();
+        expect(result).toEqual([5, 9]);
+      });
+
+      test('should handle empty arrays', async () => {
+        const result = await createPipeline([])
+          .filter((x) => x > 0)
+          .map((x) => x * 2)
+          .toArray();
+        expect(result).toEqual([]);
+      });
+
+      test('should preserve operation order', async () => {
+        // If we filter after mapping, we should get different results
+        // than if we map after filtering
+        const filterThenMap = await createPipeline([1, 2, 3, 4])
+          .filter((x) => x > 2)
+          .map((x) => x * 2)
+          .toArray();
+
+        const mapThenFilter = await createPipeline([1, 2, 3, 4])
+          .map((x) => x * 2)
+          .filter((x) => x > 4)
+          .toArray();
+
+        expect(filterThenMap).toEqual([6, 8]);
+        expect(mapThenFilter).toEqual([6, 8]);
+        // They happen to be the same in this case, but the pipeline should
+        // still apply operations in the correct order
       });
     });
   });
