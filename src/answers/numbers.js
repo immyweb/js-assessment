@@ -157,11 +157,7 @@ export function isValidNumber(value) {
 //   isSafeInteger(-9007199254740991) === true
 
 export function isSafeInteger(num) {
-  return (
-    Number.isInteger(num) &&
-    num <= Number.MAX_SAFE_INTEGER &&
-    num >= Number.MIN_SAFE_INTEGER
-  );
+  return Number.isSafeInteger(num);
 }
 
 // POWER OF TWO CHECK
@@ -257,6 +253,7 @@ export function convertToBase(num, base) {
 // TEMPERATURE CONVERSION
 // Convert temperature between Celsius and Fahrenheit
 // mode: 'toF' (Celsius to Fahrenheit) or 'toC' (Fahrenheit to Celsius)
+// Formula: toF: (C x 9/5) + 32
 // Examples:
 //   convertTemperature(0, 'toF') === 32      // 0°C to °F
 //   convertTemperature(32, 'toC') === 0      // 32°F to °C
@@ -348,9 +345,7 @@ export function average(numbers) {
     return 0;
   }
 
-  const result = numbers.reduce((acc, num) => acc + num) / numbers.length;
-
-  return result;
+  return numbers.reduce((acc, num) => acc + num) / numbers.length;
 }
 
 // COMPOUND INTEREST CALCULATOR

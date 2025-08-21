@@ -14,7 +14,6 @@ import {
   Rectangle,
   Circle,
   addValidation,
-  addLogging,
   createContextDemo,
   createPersonWithPrototype,
   getPrototypeChain
@@ -323,51 +322,6 @@ describe('Class and Prototype Exercises', () => {
     });
   });
 
-  describe('addLogging mixin', () => {
-    it('should add logging capabilities to class', () => {
-      class TestClass {
-        constructor(name) {
-          this.name = name;
-        }
-      }
-
-      const LoggableClass = addLogging(TestClass);
-      const instance = new LoggableClass('test');
-
-      expect(typeof instance.log).toBe('function');
-      expect(typeof instance.getLogs).toBe('function');
-    });
-
-    it('should store and retrieve logs', () => {
-      class TestClass {}
-      const LoggableClass = addLogging(TestClass);
-      const instance = new LoggableClass();
-
-      instance.log('Hello');
-      instance.log('World');
-
-      expect(instance.getLogs()).toEqual(['Hello', 'World']);
-    });
-
-    it('should maintain original class functionality', () => {
-      class TestClass {
-        constructor(name) {
-          this.name = name;
-        }
-
-        getName() {
-          return this.name;
-        }
-      }
-
-      const LoggableClass = addLogging(TestClass);
-      const instance = new LoggableClass('test');
-
-      expect(instance.getName()).toBe('test');
-      expect(instance instanceof TestClass).toBe(true);
-    });
-  });
-
   describe('createContextDemo', () => {
     it('should create object with name', () => {
       const obj = createContextDemo('Alice');
@@ -404,10 +358,10 @@ describe('Class and Prototype Exercises', () => {
 
     it('should demonstrate arrow method lexical binding', () => {
       const obj = createContextDemo('Alice');
-      
+
       // Arrow method should work when called on object
       expect(obj.arrowMethod()).toBe('Alice');
-      
+
       // Arrow method should work even when detached (lexically bound)
       const detachedArrow = obj.arrowMethod;
       expect(detachedArrow()).toBe('Alice');

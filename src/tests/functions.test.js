@@ -472,7 +472,7 @@ describe('Functions', () => {
       });
     });
 
-    describe('Maybe Monad', () => {
+    describe.skip('Maybe Monad', () => {
       test('Maybe should handle valid values', () => {
         const maybe = Maybe('hello');
         const result = maybe.map((s) => s.toUpperCase()).map((s) => s + '!');

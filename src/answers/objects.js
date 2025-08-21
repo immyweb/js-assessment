@@ -22,13 +22,14 @@
  * createObject('color', 'blue') // {color: 'blue'}
  */
 export function createObject(...args) {
-  const pairs = [];
+  let entries = new Map();
+
   for (let i = 0; i < args.length; i += 2) {
     if (i + 1 < args.length) {
-      pairs.push([args[i], args[i + 1]]);
+      entries.set(args[i], args[i + 1]);
     }
   }
-  return Object.fromEntries(pairs);
+  return Object.fromEntries(entries);
 }
 
 /**
@@ -214,6 +215,7 @@ export function createCounter() {
 // Example:
 //   const logged = createLoggingProxy(obj);
 //   logged.name; // logs "Accessed property: name"
+//   logged.city = 'London' // logs "Set property: city = London"
 export function createLoggingProxy(obj) {
   const handler = {
     get(obj, prop) {
@@ -234,6 +236,10 @@ export function createLoggingProxy(obj) {
 // you should be able to create a factory function with private methods
 // Example:
 //   const person = createPerson("Alice", 25);
+//   person.getName() === "Alice"
+//   person.getAge() === "25"
+//   person.setAge(30)
+//   person.setAge(160) === "Invalid age"
 //   person.getInfo() === "Alice is 25 years old"
 export function createPerson(name, age) {
   // Private method

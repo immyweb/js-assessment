@@ -306,7 +306,7 @@ export function cloneElement(element) {
 // Example:
 //   setStorageItem('username', 'john');
 export function setStorageItem(key, value) {
-  return localStorage.setItem(key, value);
+  localStorage.setItem(key, value);
 }
 
 // Retrieve a string value from localStorage
@@ -334,7 +334,7 @@ export function clearStorage() {
 // Example:
 //   setStorageObject('user', { name: 'John', age: 30 });
 export function setStorageObject(key, object) {
-  return localStorage.setItem(key, JSON.stringify(object));
+  localStorage.setItem(key, JSON.stringify(object));
 }
 
 // Retrieve an object from localStorage (with JSON parsing)
@@ -354,7 +354,7 @@ export function getStorageObject(key) {
 // Example:
 //   setStorageArray('items', ['apple', 'banana', 'orange']);
 export function setStorageArray(key, array) {
-  return localStorage.setItem(key, JSON.stringify(array));
+  localStorage.setItem(key, JSON.stringify(array));
 }
 
 // Retrieve an array from localStorage
@@ -465,7 +465,7 @@ export function createStorageCache() {
 // Example:
 //   setSessionItem('temp', 'value');
 export function setSessionItem(key, value) {
-  return sessionStorage.setItem(key, value);
+  sessionStorage.setItem(key, value);
 }
 
 // Retrieve data from sessionStorage

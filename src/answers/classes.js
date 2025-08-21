@@ -309,36 +309,6 @@ export function addValidation(BaseClass) {
 }
 
 /**
- * Create a mixin function that adds logging capabilities to any class.
- * The mixin should add log() and getLogs() methods to instances.
- *
- * class TestClass {
- *   constructor(name) { this.name = name; }
- * }
- * const LoggableClass = addLogging(TestClass);
- * const instance = new LoggableClass('test');
- * instance.log('Hello');
- * instance.log('World');
- * instance.getLogs() // ['Hello', 'World']
- */
-export function addLogging(BaseClass) {
-  return class extends BaseClass {
-    constructor(...args) {
-      super(...args);
-      this.logs = [];
-    }
-
-    log(message) {
-      this.logs.push(message);
-    }
-
-    getLogs() {
-      return this.logs;
-    }
-  };
-}
-
-/**
  * Create a method that demonstrates method binding and context.
  * Return an object with a name property and methods that show different this contexts.
  *

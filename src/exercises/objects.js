@@ -138,17 +138,24 @@ export function bindArgs(fn, ...boundArgs) {}
 //   const counter = createCounter();
 //   counter.increment() === 1
 //   counter.increment() === 2
+//   counter.decrement() === 1
+//   counter.value() === 1
 export function createCounter() {}
 
 // you should be able to create a proxy that logs property access
 // Example:
 //   const logged = createLoggingProxy(obj);
 //   logged.name; // logs "Accessed property: name"
+//   logged.city = 'London' // logs "Set property: city = London"
 export function createLoggingProxy(obj) {}
 
 // you should be able to create a factory function with private methods
 // Example:
 //   const person = createPerson("Alice", 25);
+//   person.getName() === "Alice"
+//   person.getAge() === "25"
+//   person.setAge(30)
+//   person.setAge(160) === "Invalid age"
 //   person.getInfo() === "Alice is 25 years old"
 export function createPerson(name, age) {}
 
