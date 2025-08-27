@@ -258,49 +258,32 @@ export class TrafficLight {
 }
 
 class RedState {
-  constructor(trafficLight) {
+  constructor() {
     this.state = 'Red';
-    this.trafficLight = trafficLight;
   }
 
   getNextStateName() {
     return 'Green';
   }
-
-  change() {
-    this.trafficLight.currentState =
-      this.trafficLight.getStateInstance('Green');
-  }
 }
 
 class YellowState {
-  constructor(trafficLight) {
+  constructor() {
     this.state = 'Yellow';
-    this.trafficLight = trafficLight;
   }
 
   getNextStateName() {
     return 'Red';
   }
-
-  change() {
-    this.trafficLight.currentState = this.trafficLight.getStateInstance('Red');
-  }
 }
 
 class GreenState {
-  constructor(trafficLight) {
+  constructor() {
     this.state = 'Green';
-    this.trafficLight = trafficLight;
   }
 
   getNextStateName() {
     return 'Yellow';
-  }
-
-  change() {
-    this.trafficLight.currentState =
-      this.trafficLight.getStateInstance('Yellow');
   }
 }
 
@@ -383,5 +366,72 @@ export class User {
     } else {
       return `${user} does not exist!`;
     }
+  }
+}
+
+// 15. Template Method Pattern
+// Create a Beverage base class with a template method that defines
+// the steps needed to prepare a beverage. Some steps are common to all
+// beverages (boilWater, pourInCup), while others vary (brew, addCondiments).
+// --- Examples
+//   const tea = new Tea();
+//   tea.prepareBeverage(); // Returns a string describing the preparation steps for tea
+//   const coffee = new Coffee();
+//   coffee.prepareBeverage(); // Returns a string describing the preparation steps for coffee
+export class Beverage {
+  // This is the template method that defines the algorithm
+  prepareBeverage() {
+    // Write code here to:
+    // 1. Call the boilWater method
+    // 2. Call the brew method (abstract)
+    // 3. Call the pourInCup method
+    // 4. Call the addCondiments method (abstract)
+    // 5. Return a string describing all the steps performed
+    return `${this.boilWater()}, ${this.brew()}, ${this.pourInCup()}, ${this.addCondiments()}`;
+  }
+
+  // Common method for all beverages
+  boilWater() {
+    return 'Boiling water';
+  }
+
+  // Common method for all beverages
+  pourInCup() {
+    return 'Pouring into cup';
+  }
+
+  // Abstract method - must be implemented by subclasses
+  brew() {
+    throw new Error('You must implement the brew method');
+  }
+
+  // Abstract method - must be implemented by subclasses
+  addCondiments() {
+    throw new Error('You must implement the addCondiments method');
+  }
+}
+
+// Tea and Coffee should extend the Beverage class
+export class Tea extends Beverage {
+  // Implement the brew method for Tea
+  // Implement the addCondiments method for Tea
+  brew() {
+    return 'Steeping tea';
+  }
+
+  addCondiments() {
+    return 'Adding lemon';
+  }
+}
+
+export class Coffee extends Beverage {
+  // Implement the brew method for Coffee
+  // Implement the addCondiments method for Coffee
+  brew() {
+    return 'Brewing coffee';
+  }
+
+  addCondiments() {
+    return 'Adding sugar and milk';
   }
 }

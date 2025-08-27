@@ -15,7 +15,7 @@
 //   s2.data // 'test'
 export class Singleton {
   constructor() {
-    if (!!SingletonClass.instance) {
+    if (SingletonClass.instance) {
       return SingletonClass.instance;
     }
 
@@ -114,7 +114,7 @@ export class URLBuilder {
     const baseUrl = `${this.protocol}://${this.host}`;
 
     // no path and no query
-    if (this.path.length === 0 && this.querys.size === 0) {
+    if (!this.path && this.querys.size === 0) {
       return baseUrl;
     }
 

@@ -12,7 +12,10 @@ import {
   Level3Handler,
   TrafficLight,
   ChatRoom,
-  User
+  User,
+  Beverage,
+  Tea,
+  Coffee
 } from '../exercises/design-patterns-behavioral';
 
 describe('Design Patterns', () => {
@@ -373,6 +376,37 @@ describe('Design Patterns', () => {
         // Bob should only have the first message
         expect(bob.getMessages()).toContain('Alice: Before removal');
         expect(bob.getMessages()).not.toContain('Alice: After removal');
+      });
+    });
+
+    describe('15. Template Method Pattern - Beverage', () => {
+      it('should prepare tea following the template steps', () => {
+        const tea = new Tea();
+        const result = tea.prepareBeverage();
+
+        expect(result).toContain('Boiling water');
+        expect(result).toContain('Steeping tea');
+        expect(result).toContain('Pouring into cup');
+        expect(result).toContain('Adding lemon');
+      });
+
+      it('should prepare coffee following the template steps', () => {
+        const coffee = new Coffee();
+        const result = coffee.prepareBeverage();
+
+        expect(result).toContain('Boiling water');
+        expect(result).toContain('Brewing coffee');
+        expect(result).toContain('Pouring into cup');
+        expect(result).toContain('Adding sugar and milk');
+      });
+
+      it('should throw error when brew method is not implemented', () => {
+        class UnimplementedBeverage extends Beverage {}
+        const beverage = new UnimplementedBeverage();
+
+        expect(() => beverage.prepareBeverage()).toThrow(
+          /implement the brew method/
+        );
       });
     });
   });

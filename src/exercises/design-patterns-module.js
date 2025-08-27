@@ -46,8 +46,25 @@ export const Counter = (function () {
 //   mallard.fly(); // 'Mallard is flying at altitude 0'
 //   mallard.swim(); // 'Mallard is swimming at depth 0'
 export const CanFly = {};
+
 export const CanSwim = {};
+
 export function applyMixin(targetClass, ...mixins) {}
-export class Bird {}
-export class Fish {}
-export class Duck {}
+
+export class Bird {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+export class Fish {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+export class Duck {
+  constructor(name) {
+    this.name = name;
+  }
+}

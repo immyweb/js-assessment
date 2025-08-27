@@ -66,15 +66,15 @@ export const Counter = (function () {
 export const CanFly = {
   altitude: 0,
 
-  fly: function () {
+  fly() {
     return `${this.name} is flying at altitude ${this.altitude}`;
   },
 
-  setAltitude: function (altitude) {
+  setAltitude(altitude) {
     this.altitude = altitude;
   },
 
-  getAltitude: function () {
+  getAltitude() {
     return this.altitude;
   }
 };
@@ -82,21 +82,20 @@ export const CanFly = {
 export const CanSwim = {
   depth: 0,
 
-  swim: function () {
+  swim() {
     return `${this.name} is swimming at depth ${this.depth}`;
   },
 
-  setDepth: function (depth) {
+  setDepth(depth) {
     this.depth = depth;
   },
 
-  getDepth: function () {
+  getDepth() {
     return this.depth;
   }
 };
 
 export function applyMixin(targetClass, ...mixins) {
-  // Only apply mixins if they are provided
   if (mixins && mixins.length > 0) {
     mixins.forEach((mixin) => {
       Object.assign(targetClass.prototype, mixin);

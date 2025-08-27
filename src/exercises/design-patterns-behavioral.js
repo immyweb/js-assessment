@@ -39,8 +39,11 @@ export class Calculator {}
 //   remote.pressButton(); // light turns on
 //   remote.pressUndo(); // light turns off
 export class RemoteControl {}
+
 export class Light {}
+
 export class LightOnCommand {}
+
 export class LightOffCommand {}
 
 // 12. Chain of Responsibility Pattern
@@ -55,8 +58,11 @@ export class LightOffCommand {}
 //   level1.handle({ priority: 'low', issue: 'password reset' }); // handled by Level1
 //   level1.handle({ priority: 'high', issue: 'server down' }); // handled by Level3
 export class BaseHandler {}
+
 export class Level1Handler {}
+
 export class Level2Handler {}
+
 export class Level3Handler {}
 
 // 13. State Pattern
@@ -71,6 +77,12 @@ export class Level3Handler {}
 //   light.getState(); // 'Yellow'
 //   light.change(); // changes back to Red
 export class TrafficLight {}
+
+class RedState {}
+
+class YellowState {}
+
+class GreenState {}
 
 // 14. Mediator Pattern
 // Create a ChatRoom mediator that coordinates communication between users.
@@ -90,4 +102,57 @@ export class TrafficLight {}
 //   bob.sendPrivateMessage('Hi Alice!', alice); // Private message to Alice only
 //   chatRoom.broadcast('Server message', 'System'); // System broadcast to all users
 export class ChatRoom {}
+
 export class User {}
+
+// 15. Template Method Pattern
+// Create a Beverage base class with a template method that defines
+// the steps needed to prepare a beverage. Some steps are common to all
+// beverages (boilWater, pourInCup), while others vary (brew, addCondiments).
+// --- Examples
+//   const tea = new Tea();
+//   tea.prepareBeverage(); // Returns a string describing the preparation steps for tea
+//   const coffee = new Coffee();
+//   coffee.prepareBeverage(); // Returns a string describing the preparation steps for coffee
+export class Beverage {
+  // This is the template method that defines the algorithm
+  prepareBeverage() {
+    // Write code here to:
+    // 1. Call the boilWater method
+    // 2. Call the brew method (abstract)
+    // 3. Call the pourInCup method
+    // 4. Call the addCondiments method (abstract)
+    // 5. Return a string describing all the steps performed
+  }
+
+  // Common method for all beverages
+  boilWater() {
+    return 'Boiling water';
+  }
+
+  // Common method for all beverages
+  pourInCup() {
+    return 'Pouring into cup';
+  }
+
+  // Abstract method - must be implemented by subclasses
+  brew() {
+    throw new Error('You must implement the brew method');
+  }
+
+  // Abstract method - must be implemented by subclasses
+  addCondiments() {
+    throw new Error('You must implement the addCondiments method');
+  }
+}
+
+// Tea and Coffee should extend the Beverage class
+export class Tea extends Beverage {
+  // Implement the brew method for Tea
+  // Implement the addCondiments method for Tea
+}
+
+export class Coffee extends Beverage {
+  // Implement the brew method for Coffee
+  // Implement the addCondiments method for Coffee
+}
