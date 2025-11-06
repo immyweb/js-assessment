@@ -471,3 +471,29 @@ export function vowels(str) {
   const matches = str.toLowerCase().match(/[aeiou]/g);
   return matches ? matches.length : 0;
 }
+
+// Write a function that removes duplicate characters
+// from the string.
+// Example:
+//   removeDuplicates(abcddefghh) === abcdefgh
+//   removeDuplicates(access) === aces
+export function removeDuplicates(str) {
+  const unique = new Set(str);
+
+  return [...unique].join('');
+}
+
+// Write a function that removes duplicate characters
+// from each word.
+// Example:
+//   removeDuplicatesWord('aardvark cuddly keel rook') === 'ardvk cudly kel rok'
+//   removeDuplicatesWord('abbey cuff keen rookie') === 'abey cuf ken rokie'
+export function removeDuplicatesWord(str) {
+  return str
+    .split(' ')
+    .map((word) => {
+      const unique = new Set(word);
+      return [...unique].join('');
+    })
+    .join(' ');
+}

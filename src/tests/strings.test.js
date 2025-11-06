@@ -50,7 +50,9 @@ import {
   reverseWords,
   hasUniqueChars,
   vowels,
-  maxChar
+  maxChar,
+  removeDuplicates,
+  removeDuplicatesWord
 } from '../exercises/strings';
 
 describe('Strings', () => {
@@ -392,6 +394,20 @@ describe('Strings', () => {
       expect(vowels('aeiou')).toEqual(5);
       expect(vowels('abcdefghijklmnopqrstuvwxyz')).toEqual(5);
       expect(vowels('bcdfghjkl')).toEqual(0);
+    });
+
+    test('you should be able to remove duplicate letters from a string', () => {
+      expect(removeDuplicates('abcddefghh')).toEqual('abcdefgh');
+      expect(removeDuplicates('access')).toEqual('aces');
+    });
+
+    test('you should be able to remove duplicate letters from each word', () => {
+      expect(removeDuplicatesWord('aardvark cuddly keel rook')).toEqual(
+        'ardvk cudly kel rok'
+      );
+      expect(removeDuplicatesWord('abbey cuff keen rookie')).toEqual(
+        'abey cuf ken rokie'
+      );
     });
   });
 });

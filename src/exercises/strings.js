@@ -303,3 +303,17 @@ export function maxChar(str) {}
 //   vowels('Why do you ask?') === 4
 //   vowels('Why?') === 0
 export function vowels(str) {}
+
+// Write a function that removes duplicate characters
+// from the string.
+// Example:
+//   removeDuplicates(abcddefghh) === abcdefgh
+//   removeDuplicates(access) === aces
+export function removeDuplicates(str) {}
+
+// Write a function that removes duplicate characters
+// from each word.
+// Example:
+//   removeDuplicatesWord('aardvark cuddly keel rook') === 'ardvk cudly kel rok'
+//   removeDuplicatesWord('abbey cuff keen rookie') === 'abey cuf ken rokie'
+export function removeDuplicatesWord(str) {}
