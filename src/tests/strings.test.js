@@ -42,17 +42,22 @@ import {
   parseFloatNumber,
   parseCSV,
   extractWords,
-  // Advanced string operations
+  // Misc string operations
   padLeft,
   padRight,
   titleCase,
+  // Advanced string operations
   removeVowels,
   reverseWords,
   hasUniqueChars,
   vowels,
   maxChar,
   removeDuplicates,
-  removeDuplicatesWord
+  removeDuplicatesWord,
+  lengthOfLongestSubstring,
+  groupAnagrams,
+  longestPalindrome,
+  validParentheses
 } from '../exercises/strings';
 
 describe('Strings', () => {
@@ -342,9 +347,9 @@ describe('Strings', () => {
     });
   });
 
-  // ==== ADVANCED STRING OPERATIONS ====
+  // ==== MISC STRING OPERATIONS ====
 
-  describe('Advanced String Operations', () => {
+  describe('Misc String Operations', () => {
     test('should pad string on the left', () => {
       expect(padLeft('123', 5)).toBe('  123');
       expect(padLeft('hello', 3)).toBe('hello');
@@ -363,7 +368,11 @@ describe('Strings', () => {
       expect(titleCase('HELLO')).toBe('Hello');
       expect(titleCase('hello')).toBe('Hello');
     });
+  });
 
+  // ==== ADVANCED STRING OPERATIONS ====
+
+  describe('Advanced String Operations', () => {
     test('should remove vowels', () => {
       expect(removeVowels('hello world')).toBe('hll wrld');
       expect(removeVowels('aeiou')).toBe('');
@@ -408,6 +417,25 @@ describe('Strings', () => {
       expect(removeDuplicatesWord('abbey cuff keen rookie')).toEqual(
         'abey cuf ken rokie'
       );
+    });
+
+    test('you should be able to find the length of the longest substring without duplicate characters', () => {
+      expect(lengthOfLongestSubstring('abcabcbb')).toEqual(3);
+      expect(lengthOfLongestSubstring('bbbbb')).toEqual(1);
+      expect(lengthOfLongestSubstring('pwwkew')).toEqual(3);
+    });
+
+    test('you should be able to group the anagrams together', () => {
+      expect(
+        groupAnagrams(['eat', 'tea', 'tan', 'ate', 'nat', 'bat'].sort())
+      ).toEqual([['bat'], ['nat', 'tan'], ['ate', 'eat', 'tea']].sort());
+      expect(groupAnagrams([''])).toEqual([['']]);
+      expect(groupAnagrams(['a'])).toEqual([['a']]);
+    });
+
+    test('you should be able to return the longest palindrome substring', () => {
+      expect(longestPalindrome('babad')).toEqual('aba');
+      expect(longestPalindrome('cbbd')).toEqual('bb');
     });
   });
 });

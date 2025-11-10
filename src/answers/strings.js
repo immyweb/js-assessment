@@ -497,3 +497,91 @@ export function removeDuplicatesWord(str) {
     })
     .join(' ');
 }
+
+// Write a function that find the length of the
+// longest substring without duplicate characters.
+// Example:
+//   lengthOfLongestSubstring('abcabcbb') === 3
+//   lengthOfLongestSubstring('bbbbb') === 1
+//   lengthOfLongestSubstring('pwwkew') === 3
+// Note that the answer must be a substring,
+// "pwke" is a subsequence and not a substring.
+export function lengthOfLongestSubstring(str) {
+  // Sliding Window technique
+  // https://sliding-window-visualizer-bryanneumann.replit.app/
+
+  let start = 0; // Left pointer
+  let maxLength = 0; // Result
+  let charSet = new Set(); // To track characters in the window
+
+  for (let end = 0; end < str.length; end++) {
+    let char = str[end];
+
+    // If the character is already in the window, shrink the window
+    while (charSet.has(char)) {
+      charSet.delete(str[start]); // Remove the leftmost character
+      start++; // Move the start pointer to the right
+    }
+
+    // Add the current character to the window.
+    charSet.add(char);
+
+    // Update the maximum length
+    maxLength = Math.max(maxLength, end - start + 1);
+  }
+
+  return maxLength;
+}
+
+// Given an array of strings, group the anagrams
+// together.
+// Example:
+//   groupAnagrams(["eat","tea","tan","ate","nat","bat"]) === [["bat"],["nat","tan"],["ate","eat","tea"]]
+//   groupAnagrams([""]) === [[""]]
+//   groupAnagrams(["a"]) === [["a"]]
+export function groupAnagrams(strs) {
+  let anagramMap = new Map();
+
+  strs.forEach((word) => {
+    const alphabetical = word.split('').sort().join('');
+    if (anagramMap.has(alphabetical)) {
+      anagramMap.get(alphabetical).push(word);
+    } else {
+      anagramMap.set(alphabetical, [word]);
+    }
+  });
+
+  return Array.from(anagramMap.values());
+}
+
+// Given a string, return the longest palindrome
+// substring.
+// Example:
+//   longestPalindrome('babad') === 'bab' or 'aba'
+//   longestPalindrome('cbbd') === 'bb'
+export function longestPalindrome(str) {
+  let start = 0,
+    end = 0;
+
+  function expandAroundCenter(str, left, right) {
+    while (left >= 0 && right < str.length && str[left] === str[right]) {
+      left--; // Move left pointer outward
+      right++; // Move right pointer outward
+    }
+    return right - left - 1; // Length of the palindrome
+  }
+
+  for (let i = 0; i < str.length; i++) {
+    let len1 = expandAroundCenter(str, i, i); // Odd-length palindrome
+    let len2 = expandAroundCenter(str, i, i + 1); // Even-length palindrome
+    let maxLen = Math.max(len1, len2); // Find the maximum length
+
+    // Update the start and end indices if a longer palindrome is found
+    if (maxLen > end - start) {
+      start = i - Math.floor((maxLen - 1) / 2);
+      end = i + Math.floor(maxLen / 2);
+    }
+  }
+
+  return str.substring(start, end + 1);
+}

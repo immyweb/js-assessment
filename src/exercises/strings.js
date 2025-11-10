@@ -250,7 +250,7 @@ export function parseCSV(str) {}
 //   extractWords('one-two three') === ['one', 'two', 'three']
 export function extractWords(str) {}
 
-// ==== ADVANCED STRING OPERATIONS ====
+// ==== MISC STRING OPERATIONS ====
 
 // Given a string and target length, pad with spaces on the left
 // Example:
@@ -269,6 +269,8 @@ export function padRight(str, length) {}
 //   titleCase('hello WORLD') === 'Hello world'
 //   titleCase('javaScript') === 'Javascript'
 export function titleCase(str) {}
+
+// ==== ADVANCED STRING OPERATIONS ====
 
 // Given a string, remove all vowels
 // Example:
@@ -317,3 +319,28 @@ export function removeDuplicates(str) {}
 //   removeDuplicatesWord('aardvark cuddly keel rook') === 'ardvk cudly kel rok'
 //   removeDuplicatesWord('abbey cuff keen rookie') === 'abey cuf ken rokie'
 export function removeDuplicatesWord(str) {}
+
+// Write a function that find the length of the
+// longest substring without duplicate characters.
+// Example:
+//   lengthOfLongestSubstring('abcabcbb') === 3
+//   lengthOfLongestSubstring('bbbbb') === 1
+//   lengthOfLongestSubstring('pwwkew') === 3
+// Note that the answer must be a substring,
+// "pwke" is a subsequence and not a substring.
+export function lengthOfLongestSubstring(str) {}
+
+// Given an array of strings, group the anagrams
+// together.
+// Example:
+//   groupAnagrams(["eat","tea","tan","ate","nat","bat"]) === [["bat"],["nat","tan"],["ate","eat","tea"]]
+//   groupAnagrams([""]) === [[""]]
+//   groupAnagrams(["a"]) === [["a"]]
+export function groupAnagrams(strs) {}
+
+// Given a string, return the longest palindrome
+// substring.
+// Example:
+//   longestPalindrome('babad') === 'bab' or 'aba'
+//   longestPalindrome('cbbd') === 'bb'
+export function longestPalindrome(str) {}
