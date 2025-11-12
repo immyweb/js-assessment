@@ -90,7 +90,7 @@ export function calculateShapeArea(shape: any): number {}
  * reverseArray([1, 2, 3]) // [3, 2, 1]
  * reverseArray(["a", "b", "c"]) // ["c", "b", "a"]
  */
-export function reverseArray<T>(arr: T[]): T[] {}
+export function reverseArray(arr) {}
 
 /**
  * Write a function that takes an object and a key, and returns the value at that key.
@@ -100,7 +100,7 @@ export function reverseArray<T>(arr: T[]): T[] {}
  * getProperty(obj, "name") // "John"
  * getProperty(obj, "age") // 30
  */
-export function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {}
+export function getProperty(obj, key) {}
 
 /**
  * Write a generic function that merges two objects, with the second object's properties
@@ -108,7 +108,7 @@ export function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {}
  *
  * mergeObjects({ a: 1, b: 2 }, { b: 3, c: 4 }) // { a: 1, b: 3, c: 4 }
  */
-export function mergeObjects<T, U>(obj1: T, obj2: U): T & U {}
+export function mergeObjects(obj1, obj2) {}
 
 // ===== ADVANCED TYPES =====
 

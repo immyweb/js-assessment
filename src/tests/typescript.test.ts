@@ -57,8 +57,8 @@ describe('TypeScript Fundamentals', () => {
       });
 
       test('should concatenate when strings cannot be converted to numbers', () => {
-        expect(addValues('5', 'abc')).toBe('5NaN');
-        expect(addValues('abc', 5)).toBe('NaN5');
+        expect(addValues('5', 'abc')).toBe('5abc');
+        expect(addValues('abc', 5)).toBe('abc5');
       });
     });
 
