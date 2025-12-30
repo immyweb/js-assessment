@@ -174,6 +174,19 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - Replace & split operations
 - Lookaheads/lookbehinds
 
+### Data Serialization
+
+- JSON parsing/stringification
+- Safe parsing & error handling
+- Pretty printing & compression
+- Custom replacer/reviver functions
+- Circular reference handling
+- Date serialization
+- Map & Set serialization
+- Custom toJSON methods
+- Schema validation
+- Deep cloning
+
 ## What's Missing for Senior-Level JavaScript:
 
 ### Memory Management & Performance
@@ -182,12 +195,6 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - Memory leaks identification and prevention
 - Performance optimization techniques
 - Profiling and measurement
-
-### Data Serialization
-
-- JSON parsing/stringification
-- Custom serialization logic
-- Data validation
 
 ### Advanced Async Patterns
 
