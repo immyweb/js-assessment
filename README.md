@@ -163,9 +163,18 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - Rate limiting
 - Sensitive data redaction
 
-## What's Missing for Senior-Level JavaScript:
+### Regular Expressions
 
-❌ Critical Gaps
+- Pattern matching
+- Character classes & quantifiers
+- Groups & capturing
+- Anchors
+- Flags (global, case-insensitive)
+- Common patterns (email, phone, URL)
+- Replace & split operations
+- Lookaheads/lookbehinds
+
+## What's Missing for Senior-Level JavaScript:
 
 ### Memory Management & Performance
 
@@ -173,12 +182,6 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - Memory leaks identification and prevention
 - Performance optimization techniques
 - Profiling and measurement
-
-### Regular Expressions
-
-- Pattern matching
-- Complex regex operations
-- Lookaheads/lookbehinds
 
 ### Data Serialization
 
