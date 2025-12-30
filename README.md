@@ -1,6 +1,6 @@
 # Test Driven Javascript Assessment
 
-A set of tasks to assesses the skills of a candidate for a Javascript position, or to evaluate and improve one's own skills.
+A set of tasks to assesses the skills of a candidate for a senior-level Javascript position, or to evaluate and improve one's own skills.
 
 Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/js-assessment).
 
@@ -193,8 +193,6 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - Memory leaks identification and prevention
 - Performance optimization techniques
 - Profiling and measurement
-
-## What's Missing for Senior-Level JavaScript:
 
 ### Advanced Async Patterns
 
