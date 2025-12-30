@@ -187,14 +187,14 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - Schema validation
 - Deep cloning
 
-## What's Missing for Senior-Level JavaScript:
-
 ### Memory Management & Performance
 
 - Garbage collection understanding
 - Memory leaks identification and prevention
 - Performance optimization techniques
 - Profiling and measurement
+
+## What's Missing for Senior-Level JavaScript:
 
 ### Advanced Async Patterns
 
