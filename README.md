@@ -15,7 +15,7 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - Iteration ✅
 - Checking ✅
 - Sorting ✅
-- higher-order methods ✅
+- Higher-order methods ✅
 
 ### Strings
 
@@ -89,6 +89,12 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - State machines ✅
 - Control flow patterns ✅
 
+### Browser APIs
+
+- DOM manipulation ✅
+- Event handling ✅
+- localStorage ✅
+
 ## Advanced Concepts
 
 ### Design Patterns - Creational
@@ -125,12 +131,6 @@ Largely inspired by Rebecca Murphy's JS assessment (https://github.com/rmurphey/
 - Generator functions ✅
 - Iterators ✅
 - Custom Iteration Protocols ✅
-
-### Browser APIs
-
-- DOM manipulation ✅
-- Event handling ✅
-- localStorage ✅
 
 ### Web APIs
 
